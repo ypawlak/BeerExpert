@@ -17,17 +17,12 @@ import org.drools.runtime.StatefulKnowledgeSession;
 /**
  * This is a sample class to launch a rule.
  */
-public class DroolsTest {
+public class BeerExpertMain {
 
     public static final void main(String[] args) {
         try {
         	System.out.println("main()");
 
-            // Do some stuff and then create the UI class
-
-            GuiApp  gui = new GuiApp();
-            gui.fire(args);
-            
             // load up the knowledge base
             KnowledgeBase kbase = readKnowledgeBase();
             StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
@@ -38,6 +33,11 @@ public class DroolsTest {
             message.setStatus(Message.HELLO);
             ksession.insert(message);
             ksession.fireAllRules();
+            
+            GuiApp  gui = new GuiApp();
+            gui.fire(args);
+            
+            
             logger.close();
         } catch (Throwable t) {
             t.printStackTrace();

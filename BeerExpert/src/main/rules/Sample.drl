@@ -1,6 +1,6 @@
 package com.beerExpert
  
-import com.beerExpert.DroolsTest.Message;
+import com.beerExpert.BeerExpertMain.Message;
  
 rule "Hello World"
     when
