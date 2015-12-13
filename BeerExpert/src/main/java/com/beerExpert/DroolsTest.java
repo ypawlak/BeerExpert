@@ -1,4 +1,6 @@
-package com.sample;
+package com.beerExpert;
+
+import gui.GuiApp;
 
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
@@ -19,6 +21,13 @@ public class DroolsTest {
 
     public static final void main(String[] args) {
         try {
+        	System.out.println("main()");
+
+            // Do some stuff and then create the UI class
+
+            GuiApp  gui = new GuiApp();
+            gui.fire(args);
+            
             // load up the knowledge base
             KnowledgeBase kbase = readKnowledgeBase();
             StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();

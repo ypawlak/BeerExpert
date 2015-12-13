@@ -1,6 +1,6 @@
-package com.sample
+package com.beerExpert
  
-import com.sample.DroolsTest.Message;
+import com.beerExpert.DroolsTest.Message;
  
 rule "Hello World"
     when
