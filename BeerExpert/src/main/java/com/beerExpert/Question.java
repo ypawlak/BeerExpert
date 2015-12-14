@@ -1,8 +1,8 @@
 package com.beerExpert;
 
-import java.util.List;
+import java.util.Map;
 
 public class Question {
 	public String QuestionTxt;
-	public List<String> Answers;
+	public Map<String, Object> Answers;
 }

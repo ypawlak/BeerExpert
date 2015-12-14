@@ -1,20 +1,43 @@
 package com.beerExpert
  
-import com.beerExpert.BeerExpertMain.Message;
+import com.beerExpert.BeerExpertMain;
+import com.beerExpert.Question;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import gui.GuiApp;
  
-rule "Hello World"
-    when
-        m : Message( status == Message.HELLO, myMessage : message )
-    then
-        System.out.println( myMessage );
-        m.setMessage( "Goodbye cruel world" );
-        m.setStatus( Message.GOODBYE );
-        update( m );
+rule "Initialize"
+	when
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy chcesz wypiæ piwo?";
+		Map<String, Object> options = new HashMap<String, Object>();
+		UserTaste utBeer = new UserTaste();
+		utBeer.setWantsBeer(true);
+        options.put("Tak", utBeer);
+        UserTaste utNoBeer = new UserTaste();
+        utBeer.setWantsBeer(false);
+        options.put("Nie", utNoBeer);
+        question.Answers = options;
+        BeerExpertMain.ActiveQuestion = question;
 end
 
-rule "GoodBye"
-    when
-        Message( status == Message.GOODBYE, myMessage : message )
-    then
-        System.out.println( myMessage );
+rule "Idiot"
+	when
+		UserTaste (wantsBeer == false)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Idiota";
+		BeerExpertMain.ActiveQuestion = question;
+end
+
+rule "TBA"
+	when
+		UserTaste (wantsBeer == true)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Ci¹g dalszy nast¹pi";
+		BeerExpertMain.ActiveQuestion = question;
 end

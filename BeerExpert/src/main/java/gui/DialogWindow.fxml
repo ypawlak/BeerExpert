@@ -11,5 +11,6 @@
 			xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBox">
 	   	<children>
 	    	<Label alignment="CENTER" textAlignment="CENTER" fx:id="questionLbl"/>
+	    	<Button text="OK" onAction="#okButtonClicked" fx:id="okBtn"/>
 	    </children>
     </VBox>
