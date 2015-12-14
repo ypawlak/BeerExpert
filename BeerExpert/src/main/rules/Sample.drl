@@ -30,6 +30,9 @@ rule "Idiot"
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Idiota";
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("OK", null);
+		question.Answers = options;
 		BeerExpertMain.ActiveQuestion = question;
 end
 
@@ -39,5 +42,8 @@ rule "TBA"
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Ci¹g dalszy nast¹pi";
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("OK", null);
+		question.Answers = options;
 		BeerExpertMain.ActiveQuestion = question;
 end
