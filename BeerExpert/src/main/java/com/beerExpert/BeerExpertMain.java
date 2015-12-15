@@ -1,5 +1,7 @@
 package com.beerExpert;
 
+import java.util.Observer;
+
 import gui.GuiApp;
 
 import org.drools.KnowledgeBase;
@@ -13,6 +15,8 @@ import org.drools.io.ResourceFactory;
 import org.drools.logger.KnowledgeRuntimeLogger;
 import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import com.beerExpert.Question;
 
@@ -32,31 +36,28 @@ public class BeerExpertMain {
 	public static void setKsession(StatefulKnowledgeSession ksession) {
 		BeerExpertMain.ksession = ksession;
 	}
+	
+	public static void SetGui(GuiApp val) {
+		gui = val;
+	}
 
 	private static KnowledgeRuntimeLogger logger;
 
-	public static GuiApp getGui() {
-		return gui;
-	}
-
-	public void setGui(GuiApp gui) {
-		this.gui = gui;
-	}
 
 	public static final void main(String[] args) {
 		try {
 			System.out.println("main()");
 			initializeKnowledgeBase();
+			ksession.fireAllRules();
 			initializeGui(args);
-			logger.close();
+			//logger.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	}
 	
 	private static void initializeGui(String[] args){
-		gui = new GuiApp();
-		gui.fire(args);
+		new GuiApp().fire(args);
 	}
 	
 	private static void initializeKnowledgeBase() throws Exception{
@@ -80,5 +81,16 @@ public class BeerExpertMain {
 		KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
 		kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
 		return kbase;
+	}
+
+	public static void update() {
+		try {
+			getKsession().insert(ActiveQuestion.GetSelectedState());
+			getKsession().fireAllRules();
+			gui.getController().ShowQuestion();
+		} catch(NotImplementedException ex) {
+			System.err.println("FATAL ERROR");
+		}
+		
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
+import javax.swing.text.DefaultEditorKit.BeepAction;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,7 +24,7 @@ import com.beerExpert.Question;
 import com.beerExpert.BeerExpertMain;
 import com.beerExpert.UserTaste;
 
-public class DialogWindowController extends Observable implements Initializable {
+public class DialogWindowController implements Initializable {
 
 	@FXML
 	private Label questionLbl;
@@ -37,11 +39,14 @@ public class DialogWindowController extends Observable implements Initializable 
 
 	}
 	
-	public void ShowQuestion (Question question) {
+	public void ShowQuestion () {
 		optionsBox.getChildren().clear();
-		questionLbl.setText(question.QuestionTxt);
+		if(BeerExpertMain.ActiveQuestion == null)
+			return;
+		
+		questionLbl.setText(BeerExpertMain.ActiveQuestion.QuestionTxt);
 		ToggleGroup questionGroup = new ToggleGroup();
-		for (Map.Entry<String, Object> ans : question.Answers.entrySet()) {
+		for (Map.Entry<String, Object> ans : BeerExpertMain.ActiveQuestion.Answers.entrySet()) {
 			RadioButton option = new RadioButton(ans.getKey());
 			option.setToggleGroup(questionGroup);
 			option.setUserData(ans);
@@ -51,20 +56,15 @@ public class DialogWindowController extends Observable implements Initializable 
 
 	@FXML
 	private void okButtonClicked(ActionEvent event) {
-		setChanged();
-		notifyObservers();
+		
 		for (Node child : optionsBox.getChildren()) {
 			if (child instanceof RadioButton
 					&& ((RadioButton) child).isSelected()) {
-				BeerExpertMain.getKsession().insert(
-						BeerExpertMain.ActiveQuestion.Answers
-								.get(((RadioButton) child).getText()));
-
+				BeerExpertMain.ActiveQuestion.SelectedAnswer = ((RadioButton) child).getText();
 			}
 		}
-		BeerExpertMain.getKsession().fireAllRules();
-		ShowQuestion(BeerExpertMain.ActiveQuestion);
-
+		
+		BeerExpertMain.update();
 	}
 
 }
