@@ -1,14 +1,15 @@
 package com.beerExpert;
 
 public class UserTaste {
-	boolean wantsBeer;
+	public boolean WantsBeer;
+	public boolean IsFlavorRelevant;
 	
-	public void setWantsBeer(boolean value) {
-		wantsBeer = value;
-	}
-	
-	public boolean getWantsBeer() {
-		return wantsBeer;
+	public UserTaste Populate()
+	{
+		UserTaste newObj = new UserTaste();
+		newObj.WantsBeer = this.WantsBeer;
+		newObj.IsFlavorRelevant = this.IsFlavorRelevant;
+		return newObj;
 	}
 	
 }

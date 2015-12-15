@@ -85,8 +85,9 @@ public class BeerExpertMain {
 
 	public static void update() {
 		try {
-			getKsession().insert(ActiveQuestion.GetSelectedState());
-			getKsession().fireAllRules();
+			StatefulKnowledgeSession session = getKsession();
+			session.insert(ActiveQuestion.GetSelectedState());
+			session.fireAllRules();
 			gui.getController().ShowQuestion();
 		} catch(NotImplementedException ex) {
 			System.err.println("FATAL ERROR");

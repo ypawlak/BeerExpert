@@ -13,37 +13,38 @@ rule "Initialize"
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Czy chcesz wypiæ piwo?";
-		Map<String, Object> options = new HashMap<String, Object>();
 		UserTaste utBeer = new UserTaste();
-		utBeer.setWantsBeer(true);
-        options.put("Tak", utBeer);
+		utBeer.WantsBeer = true;
+        question.Answers.put("Tak", utBeer);
         UserTaste utNoBeer = new UserTaste();
-        utBeer.setWantsBeer(false);
-        options.put("Nie", utNoBeer);
-        question.Answers = options;
+        utNoBeer.WantsBeer = false;
+        question.Answers.put("Nie", utNoBeer);
         BeerExpertMain.ActiveQuestion = question;
 end
 
 rule "Idiot"
 	when
-		UserTaste (wantsBeer == false)
+		UserTaste (WantsBeer == false)
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Idiota";
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("OK", null);
-		question.Answers = options;
+		question.Answers.put("OK", null);
 		BeerExpertMain.ActiveQuestion = question;
 end
 
-rule "TBA"
+rule "Overture"
 	when
-		UserTaste (wantsBeer == true)
+		taste: UserTaste (WantsBeer == true)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Ci¹g dalszy nast¹pi";
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("OK", null);
-		question.Answers = options;
+		question.QuestionTxt = "Czy chcesz wypiæ piwo nie zwracaj¹c specjalnej uwagi na jego smak?";
+		
+		UserTaste peasant = taste.Populate();
+		peasant.IsFlavorRelevant = false;
+		UserTaste fussy = taste.Populate();
+		fussy.IsFlavorRelevant = true;
+		question.Answers.put("Tak", peasant);
+		question.Answers.put("Nie", fussy);
+		
 		BeerExpertMain.ActiveQuestion = question;
 end
