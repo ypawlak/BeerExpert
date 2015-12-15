@@ -25,6 +25,8 @@ public class DialogWindowController extends Observable implements Initializable 
 	@FXML
 	private VBox mainBox;
 	@FXML
+	private VBox optionsBox;
+	@FXML
 	private Button okBtn;
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -32,13 +34,14 @@ public class DialogWindowController extends Observable implements Initializable 
 	}
 	
 	public void ShowQuestion (Question question) {
+		optionsBox.getChildren().clear();
 		questionLbl.setText(question.QuestionTxt);
 		ToggleGroup questionGroup = new ToggleGroup();
 		for(Map.Entry <String, Object> ans : question.Answers.entrySet()) {
 			RadioButton option = new RadioButton(ans.getKey());
 			option.setToggleGroup(questionGroup);
 			option.setUserData(ans);
-			mainBox.getChildren().add(option);
+			optionsBox.getChildren().add(option);
 		}
 	}
 	
