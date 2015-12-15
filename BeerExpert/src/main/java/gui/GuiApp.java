@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -49,14 +50,20 @@ public class GuiApp extends Application implements Observer{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogWindow.fxml"));
         Parent root = (Parent)loader.load();
         controller = (DialogWindowController)loader.getController();
-
         controller.addObserver((Observer) this);
         
-        Scene scene = new Scene(root, 300, 200, Color.BURLYWOOD);
+//        AnchorPane anchorPane = new AnchorPane();
+//        AnchorPane.setTopAnchor(root, 3.0);
+//        AnchorPane.setBottomAnchor(root, 3.0);
+//        AnchorPane.setLeftAnchor(root, 10.0);
+//        AnchorPane.setRightAnchor(root, 3.0);
+//        anchorPane.getChildren().add(root);
+        Scene scene = new Scene(root);
         
         primaryStage.setTitle("Super barman");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.sizeToScene();
         
     	//controller.ShowQuestion(activeQuestion);
     }

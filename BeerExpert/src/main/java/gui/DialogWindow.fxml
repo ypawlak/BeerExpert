@@ -5,13 +5,42 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-   
-	<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="10.0"
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+
+	<GridPane prefHeight="150"
+			prefWidth="300"
 			fx:controller="gui.DialogWindowController"
-			xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBox">
-	   	<children>
-	    	<Label alignment="CENTER" textAlignment="CENTER" fx:id="questionLbl"/>
-	    	<VBox fx:id="optionsBox"/>
-	    	<Button text="OK" onAction="#okButtonClicked" fx:id="okBtn"/>
-	    </children>
-    </VBox>
+			xmlns:fx="http://javafx.com/fxml/1" fx:id="mainPane"
+			alignment="center" hgap="10" vgap="10">
+	   		
+	   		<columnConstraints>
+        		<ColumnConstraints />
+      		</columnConstraints>
+      		<rowConstraints>
+        		<RowConstraints prefHeight="50" />
+        		<RowConstraints vgrow="ALWAYS" />
+        		<RowConstraints prefHeight="50" />
+      		</rowConstraints>
+	    	<Label textAlignment="CENTER" fx:id="questionLbl"
+	    		GridPane.columnIndex="0"
+	    		GridPane.rowIndex="0"
+        		GridPane.columnSpan="2">
+	    		
+	    	</Label>
+	    	
+	    	<VBox fx:id="optionsBox" spacing="8" alignment="CENTER_LEFT"
+	    		GridPane.columnIndex="0" GridPane.rowIndex="1">
+	    		
+	    	</VBox>
+	    	
+	    	<Button text="OK" onAction="#okButtonClicked" fx:id="okBtn"
+	    		 alignment="CENTER"
+	    		 textAlignment="CENTER"
+	    		 GridPane.columnIndex="0" GridPane.rowIndex="2"
+	    		 GridPane.columnSpan="2">
+    		 	<padding><Insets top="3" right="20" bottom="3" left="20"/></padding>
+    		 </Button>
+    </GridPane>

@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Button;
@@ -25,7 +27,7 @@ public class DialogWindowController extends Observable implements Initializable 
 	@FXML
 	private Label questionLbl;
 	@FXML
-	private VBox mainBox;
+	private GridPane mainPane;
 	@FXML
 	private VBox optionsBox;
 	@FXML
@@ -51,7 +53,7 @@ public class DialogWindowController extends Observable implements Initializable 
 	private void okButtonClicked(ActionEvent event) {
 		setChanged();
 		notifyObservers();
-		for (Node child : mainBox.getChildren()) {
+		for (Node child : optionsBox.getChildren()) {
 			if (child instanceof RadioButton
 					&& ((RadioButton) child).isSelected()) {
 				BeerExpertMain.getKsession().insert(
