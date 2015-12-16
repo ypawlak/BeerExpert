@@ -1,10 +1,14 @@
 package gui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
 import javax.swing.text.DefaultEditorKit.BeepAction;
 
 import javafx.event.ActionEvent;
@@ -41,16 +45,21 @@ public class DialogWindowController implements Initializable {
 	
 	public void ShowQuestion () {
 		optionsBox.getChildren().clear();
-		if(BeerExpertMain.ActiveQuestion == null)
-			return;
-		
-		questionLbl.setText(BeerExpertMain.ActiveQuestion.QuestionTxt);
-		ToggleGroup questionGroup = new ToggleGroup();
-		for (Map.Entry<String, Object> ans : BeerExpertMain.ActiveQuestion.Answers.entrySet()) {
-			RadioButton option = new RadioButton(ans.getKey());
-			option.setToggleGroup(questionGroup);
-			option.setUserData(ans);
-			optionsBox.getChildren().add(option);
+		if (BeerExpertMain.SelectedAnswer != null){
+			questionLbl.setText(BeerExpertMain.SelectedAnswer.AnswerTxt);
+			//TODO: wyœwietliæ AnwerImage
+		}
+		else{
+			if(BeerExpertMain.ActiveQuestion == null)
+				return;
+			questionLbl.setText(BeerExpertMain.ActiveQuestion.QuestionTxt);
+			ToggleGroup questionGroup = new ToggleGroup();
+			for (Map.Entry<String, Object> ans : BeerExpertMain.ActiveQuestion.Answers.entrySet()) {
+				RadioButton option = new RadioButton(ans.getKey());
+				option.setToggleGroup(questionGroup);
+				option.setUserData(ans);
+				optionsBox.getChildren().add(option);
+			}
 		}
 	}
 

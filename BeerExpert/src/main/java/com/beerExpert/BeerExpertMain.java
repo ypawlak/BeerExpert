@@ -28,6 +28,7 @@ public class BeerExpertMain {
 	private static KnowledgeBase kbase;
 	private static StatefulKnowledgeSession ksession;
 	public static Question ActiveQuestion;
+	public static Answer SelectedAnswer;
 
 	public static StatefulKnowledgeSession getKsession() {
 		return ksession;

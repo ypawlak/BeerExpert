@@ -58,9 +58,10 @@ rule "CorpoBeer"
 	when 
 		UserTaste (FlavorRelevancy == "peasant")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Eurolager";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Eurolager";
+		answer.SetImage("Eurolager.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: CorpoBeer");
 end
 
@@ -364,9 +365,10 @@ rule "GentainHop"
 	when 
 		UserTaste (Hop == "Gentain")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Pilzner";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Pilzner";
+		answer.SetImage("Pilzner.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: GentainHop");
 end
 
@@ -374,9 +376,10 @@ rule "NoChallenges"
 	when 
 		UserAttitude (Requirements == "Stable")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Pilzner";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Pilzner";
+		answer.SetImage("Pilzner.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoChallenges");
 end
 
@@ -384,9 +387,10 @@ rule "NoGentainHop"
 	when 
 		UserTaste (Hop == "No gentain")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
+		answer.SetImage("Pszeniczne.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoGentainHop");
 end
 
@@ -394,9 +398,10 @@ rule "EatsSnacks"
 	when 
 		Food (Kind == "Snack")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
+		answer.SetImage("Pszeniczne.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: EatsSnacks");
 end
 
@@ -404,9 +409,10 @@ rule "OryginalTaste"
 	when 
 		UserTaste (Flavor == "Oryginal")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		answer.SetImage("Farmhouse.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: OryginalTaste");
 end
 
@@ -416,9 +422,10 @@ rule "DrinkingNoHop"
 		Circumstances (Destination == "Just drinking")
 		
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		answer.SetImage("Farmhouse.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: DrinkingNoHop");
 end
 
@@ -426,9 +433,10 @@ rule "Challenges"
 	when 
 		UserAttitude (Requirements == "Challenge")	
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		answer.SetImage("Farmhouse.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Challenges");
 end
 
@@ -436,9 +444,10 @@ rule "Chocolate"
 	when 
 		UserTaste (Aroma == "Chocolate")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		answer.SetImage("Porter.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Chocolate");
 end
 
@@ -446,9 +455,10 @@ rule "Weak"
 	when 
 		UserAttitude (Strength == "Weak")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		answer.SetImage("Porter.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Strong");
 end
 
@@ -456,9 +466,10 @@ rule "NoSourNoHop"
 	when 
 		UserTaste (Sour == "No", HopBeer == "No")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		answer.SetImage("Porter.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoSourNoHop");
 end
 
@@ -466,9 +477,10 @@ rule "NoSourHop"
 	when 
 		UserTaste (Sour == "No", HopBeer == "Yes")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Pale Ale";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Pale Ale";
+		answer.SetImage("PaleAle.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoSourHop");
 end
 
@@ -477,9 +489,10 @@ rule "DrinkingHop"
 		UserTaste (HopBeer == "Yes")
 		Circumstances (Destination == "Just drinking")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Pale Ale";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Pale Ale";
+		answer.SetImage("PaleAle.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: DrinkingHop");
 end
 
@@ -487,9 +500,10 @@ rule "Bitters"
 	when 
 		UserTaste (Bitters == "Yes")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "IPA";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "IPA";
+		answer.SetImage("IPA.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Bitters");
 end
 
@@ -497,9 +511,10 @@ rule "Fruit"
 	when 
 		UserTaste (Aroma == "Fruit")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "IPA";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "IPA";
+		answer.SetImage("IPA.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Fruit");
 end
 
@@ -507,9 +522,10 @@ rule "Coffee"
 	when 
 		UserTaste (Coffee == "Yes")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Rosyjski Imperialny Stout";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Rosyjski Imperialny Stout";
+		answer.SetImage("Russian.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Coffee");
 end
 
@@ -517,9 +533,10 @@ rule "Sour"
 	when 
 		UserTaste (Sour == "Yes")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Sour";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Sour";
+		answer.SetImage("Sour.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Sour");
 end
 
@@ -527,9 +544,10 @@ rule "Dessert"
 	when 
 		Food (DishType == "Dessert")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Sour";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Sour";
+		answer.SetImage("Sour.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Dessert");
 end
 
@@ -537,8 +555,9 @@ rule "NoCoffee"
 	when 
 		UserTaste (Coffee == "No")
 	then
-		Question question = new Question();
-		question.QuestionTxt = MainConsts.ChosenBeer + "Barley Wine";
-		BeerExpertMain.ActiveQuestion = question;
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + "Barley Wine";
+		answer.SetImage("Barley.jpg");
+		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoCoffee");
 end
