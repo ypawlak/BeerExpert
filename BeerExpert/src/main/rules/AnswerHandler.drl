@@ -1,0 +1,31 @@
+//list any import classes here.
+package com.beerExpert
+import com.beerExpert.Question;
+import com.beerExpert.UserTaste
+
+
+//declare any global variables here
+
+
+
+
+rule "InitAnswer"
+
+    when
+    	q: Question (QuestionTxt == QuestionsSet.InitializeQuestionTxt, SelectedAnswers.size() != null)
+    then
+        UserTaste taste = new UserTaste();
+        taste.Desire = q.SelectedAnswers.get(0);
+        insert(taste);
+end
+
+rule "IdiotAnswer"
+
+    when
+    	q: Question (QuestionTxt == QuestionsSet.ThinkItOverTxt)
+    	taste: UserTaste (Desire == AnswersSet.No)
+    then
+        retract(taste);
+        insert(new UserTaste());
+end
+
