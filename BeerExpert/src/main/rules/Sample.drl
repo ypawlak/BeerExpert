@@ -59,14 +59,14 @@ rule "CorpoBeer"
 		UserTaste (FlavorRelevancy == "peasant")
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Jakiej dru¿ynie pi³karskiej kibicujesz?";
+		question.QuestionTxt = MainConsts.ChosenBeer + "Eurolager";
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: CorpoBeer");
 end
 
 rule "AskLocation"
 	when 
-		UserTaste (FlavorRelevancy == "fussy", Flavor == null, Aroma == null)
+		UserTaste (FlavorRelevancy == "fussy", Flavor == null, Aroma == null, HopBeer == null, Coffee == null, Bitters == null)
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Czy chcesz napiæ siê na œwie¿ym powietrzu?";
@@ -74,7 +74,7 @@ rule "AskLocation"
 		Circumstances freshAir = new Circumstances();
 		freshAir.Location = "Fresh air";
 		Circumstances closedRoom = new Circumstances();
-		closedRoom.Location = "ClosedRoom";
+		closedRoom.Location = "Closed room";
 		question.Answers.put("Tak", freshAir);
 		question.Answers.put("Nie", closedRoom);
 		
@@ -244,4 +244,301 @@ rule "AskAroma"
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskAroma");
+end
+
+rule "AskHopBeer"
+	when
+		(Circumstances (Destination == "Just drinking")
+		and
+		taste: UserTaste(FlavorRelevancy == "fussy", HopBeer == null))
+		or
+		taste: UserTaste (Sour == "No", HopBeer == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy lubisz chmielowe piwa?";
+		
+		UserTaste hopBeer = taste.Populate();
+		hopBeer.HopBeer = "Yes";
+		UserTaste noHopBeer = taste.Populate();
+		noHopBeer.HopBeer = "No";
+		question.Answers.put("Tak", hopBeer);
+		question.Answers.put("Nie", noHopBeer);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskHopBeer");
+end
+
+rule "AskWinter"
+	when 
+		circumstances: Circumstances (Location == "Closed room", SituationOutside == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy jest ch³odna zimowa noc?";
+		
+		Circumstances winterNight = circumstances.Populate();
+		winterNight.SituationOutside = "Winter night";
+		Circumstances noWinterNight = circumstances.Populate();
+		noWinterNight.SituationOutside = "No winter night";
+		question.Answers.put("Tak", winterNight);
+		question.Answers.put("Nie", noWinterNight);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskWinter");
+end
+
+rule "AskStrength"
+	when 
+		Circumstances (SituationOutside == "Winter night")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy piwo ma lekko uderzyc do g³owy?";
+		
+		UserAttitude strong = new UserAttitude();
+		strong.Strength = "Strong";
+		UserAttitude weak = new UserAttitude();
+		weak.Strength = "Weak";
+		question.Answers.put("Tak", strong);
+		question.Answers.put("Nie", weak);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskStrength");
+end
+
+rule "AskCoffee"
+	when 
+		UserAttitude(Strength == "Strong");
+		taste: UserTaste(FlavorRelevancy == "fussy", Coffee == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy lubisz palon¹ kawê?";
+		
+		UserTaste coffee = taste.Populate();
+		coffee.Coffee = "Yes";
+		UserTaste noCoffee = taste.Populate();
+		noCoffee.Coffee = "No";
+		question.Answers.put("Tak", coffee);
+		question.Answers.put("Nie", noCoffee);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskCoffee");
+end
+
+rule "AskBitters"
+	when 
+		Circumstances (SituationOutside == "No winter night")
+		taste: UserTaste (FlavorRelevancy == "fussy", Bitters == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy chcesz coœ goryczkowego?";
+		
+		UserTaste bitters = taste.Populate();
+		bitters.Bitters = "Yes";
+		UserTaste noBitters = taste.Populate();
+		noBitters.Bitters = "No";
+		question.Answers.put("Tak", bitters);
+		question.Answers.put("Nie", noBitters);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskBitters");
+end
+
+rule "AskSour"
+	when 
+		taste: UserTaste (FlavorRelevancy == "fussy", Bitters == "No", Sour == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy lubisz kwaœne cukierki?";
+		
+		UserTaste sour = taste.Populate();
+		sour.Sour = "Yes";
+		UserTaste noSour = taste.Populate();
+		noSour.Sour = "No";
+		question.Answers.put("Tak", sour);
+		question.Answers.put("Nie", noSour);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskSour");
+end
+
+rule "GentainHop"
+	when 
+		UserTaste (Hop == "Gentain")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Pilzner";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: GentainHop");
+end
+
+rule "NoChallenges"
+	when 
+		UserAttitude (Requirements == "Stable")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Pilzner";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: NoChallenges");
+end
+
+rule "NoGentainHop"
+	when 
+		UserTaste (Hop == "No gentain")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: NoGentainHop");
+end
+
+rule "EatsSnacks"
+	when 
+		Food (Kind == "Snack")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: EatsSnacks");
+end
+
+rule "OryginalTaste"
+	when 
+		UserTaste (Flavor == "Oryginal")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: OryginalTaste");
+end
+
+rule "DrinkingNoHop"
+	when 
+		UserTaste (HopBeer == "No")
+		Circumstances (Destination == "Just drinking")
+		
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: DrinkingNoHop");
+end
+
+rule "Challenges"
+	when 
+		UserAttitude (Requirements == "Challenge")	
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Challenges");
+end
+
+rule "Chocolate"
+	when 
+		UserTaste (Aroma == "Chocolate")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Chocolate");
+end
+
+rule "Weak"
+	when 
+		UserAttitude (Strength == "Weak")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Strong");
+end
+
+rule "NoSourNoHop"
+	when 
+		UserTaste (Sour == "No", HopBeer == "No")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Porter lub Stout";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: NoSourNoHop");
+end
+
+rule "NoSourHop"
+	when 
+		UserTaste (Sour == "No", HopBeer == "Yes")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Pale Ale";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: NoSourHop");
+end
+
+rule "DrinkingHop"
+	when 
+		UserTaste (HopBeer == "Yes")
+		Circumstances (Destination == "Just drinking")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Pale Ale";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: DrinkingHop");
+end
+
+rule "Bitters"
+	when 
+		UserTaste (Bitters == "Yes")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "IPA";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Bitters");
+end
+
+rule "Fruit"
+	when 
+		UserTaste (Aroma == "Fruit")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "IPA";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Fruit");
+end
+
+rule "Coffee"
+	when 
+		UserTaste (Coffee == "Yes")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Rosyjski Imperialny Stout";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Coffee");
+end
+
+rule "Sour"
+	when 
+		UserTaste (Sour == "Yes")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Sour";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Sour");
+end
+
+rule "Dessert"
+	when 
+		Food (DishType == "Dessert")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Sour";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Dessert");
+end
+
+rule "NoCoffee"
+	when 
+		UserTaste (Coffee == "No")
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChosenBeer + "Barley Wine";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: NoCoffee");
 end

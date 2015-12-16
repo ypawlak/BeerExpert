@@ -5,6 +5,7 @@ public class Circumstances {
 	public String Weather;
 	public String Movement;
 	public String Destination;
+	public String SituationOutside;
 	
 	public Circumstances Populate() {
 		Circumstances newObj = new Circumstances();
@@ -12,6 +13,7 @@ public class Circumstances {
 		newObj.Weather = this.Weather;
 		newObj.Movement = this.Movement;
 		newObj.Destination = this.Destination;
+		newObj.SituationOutside = this.SituationOutside;
 		return newObj;
 	}
 }
