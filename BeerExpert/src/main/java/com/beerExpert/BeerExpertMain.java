@@ -71,6 +71,8 @@ public class BeerExpertMain {
 				.newKnowledgeBuilder();
 		kbuilder.add(ResourceFactory.newClassPathResource("Sample.drl"),
 				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("AnswerHandler.drl"),
+				ResourceType.DRL);
 		KnowledgeBuilderErrors errors = kbuilder.getErrors();
 		if (errors.size() > 0) {
 			for (KnowledgeBuilderError error : errors) {
@@ -86,7 +88,8 @@ public class BeerExpertMain {
 	public static void update() {
 		try {
 			StatefulKnowledgeSession session = getKsession();
-			session.insert(ActiveQuestion.GetSelectedState());
+			session.insert(ActiveQuestion);
+			//session.insert(ActiveQuestion.GetSelectedState());
 			session.fireAllRules();
 			gui.getController().ShowQuestion();
 		} catch(NotImplementedException ex) {

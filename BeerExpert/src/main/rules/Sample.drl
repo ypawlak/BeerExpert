@@ -11,55 +11,40 @@ import gui.GuiApp;
 rule "Initialize"
 	when
 	then
-		Question question = new Question();
-		question.QuestionTxt = "Czy chcesz wypiæ piwo?";
-		UserTaste utBeer = new UserTaste();
-		utBeer.Desire = "Beer";
-        question.Answers.put("Tak", utBeer);
-        UserTaste utNoBeer = new UserTaste();
-        utNoBeer.Desire = "No Beer";
-        question.Answers.put("Nie", utNoBeer);
-        BeerExpertMain.ActiveQuestion = question;
+        BeerExpertMain.ActiveQuestion = QuestionsSet.InitQuestion;
         System.out.println("Executed: Initialize");
+end
+
+rule "InitializeAgain"
+	when
+		u: UserTaste(Desire == null)
+	then
+		BeerExpertMain.ActiveQuestion = QuestionsSet.InitQuestion;
+		System.out.println("Executed: InitializeAgain");
 end
 
 rule "Idiot"
 	when
-		UserTaste (Desire == "No Beer")
+		UserTaste (Desire == AnswersSet.No)
 	then
-		Question question = new Question();
-		question.QuestionTxt = "Idiota";
-		question.Answers.put("OK", null);
-		BeerExpertMain.ActiveQuestion = question;
+		BeerExpertMain.ActiveQuestion = QuestionsSet.ThinkItOverQuestion;
 		System.out.println("Executed: Idiot");
 end
 
 rule "Overture"
 	when
-		taste: UserTaste (Desire == "Beer", KnownFlavorRelevancy == false)
+		taste: UserTaste (Desire == AnswersSet.Yes)
 	then
-		Question question = new Question();
-		question.QuestionTxt = "Czy smak piwa jest Ci obojêtny?";
-		
-		UserTaste peasant = taste.Populate();
-		peasant.FlavorRelevancy = "peasant";
-		peasant.KnownFlavorRelevancy = true;
-		UserTaste fussy = taste.Populate();
-		fussy.FlavorRelevancy = "fussy";
-		fussy.KnownFlavorRelevancy = true;
-		question.Answers.put("Tak", peasant);
-		question.Answers.put("Nie", fussy);
-		
-		BeerExpertMain.ActiveQuestion = question;
+		BeerExpertMain.ActiveQuestion = QuestionsSet.OvertureQuestion;
 		System.out.println("Executed: Overture");
 end
-
+/*
 rule "CorpoBeer"
 	when 
 		UserTaste (FlavorRelevancy == "peasant")
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Jakiej dru¿ynie pi³karskiej kibicujesz?";
+		FlavorRelevantonTxt = "Jakiej dru¿ynie pi³karskiej kibicujesz?";
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: CorpoBeer");
 end
@@ -68,7 +53,7 @@ rule "AskLocation"
 	when 
 		UserTaste (FlavorRelevancy == "fussy", Flavor == null, Aroma == null)
 	then
-		Question question = new Question();
+		Question qFlavorRelevantuestion();
 		question.QuestionTxt = "Czy chcesz napiæ siê na œwie¿ym powietrzu?";
 		
 		Circumstances freshAir = new Circumstances();
@@ -233,7 +218,7 @@ rule "AskAroma"
 		taste: UserTaste (Aroma == null, FlavorRelevancy == "fussy")
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Które aromaty preferujesz?";
+		quFlavorRelevantTxt = "Które aromaty preferujesz?";
 		
 		UserTaste fruit = taste.Populate();
 		fruit.Aroma = "Fruit";
@@ -244,4 +229,4 @@ rule "AskAroma"
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskAroma");
-end
+end*/

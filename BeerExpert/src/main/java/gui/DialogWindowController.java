@@ -46,8 +46,8 @@ public class DialogWindowController implements Initializable {
 		
 		questionLbl.setText(BeerExpertMain.ActiveQuestion.QuestionTxt);
 		ToggleGroup questionGroup = new ToggleGroup();
-		for (Map.Entry<String, Object> ans : BeerExpertMain.ActiveQuestion.Answers.entrySet()) {
-			RadioButton option = new RadioButton(ans.getKey());
+		for (String ans : BeerExpertMain.ActiveQuestion.Answers) {
+			RadioButton option = new RadioButton(ans);
 			option.setToggleGroup(questionGroup);
 			option.setUserData(ans);
 			optionsBox.getChildren().add(option);
@@ -60,7 +60,7 @@ public class DialogWindowController implements Initializable {
 		for (Node child : optionsBox.getChildren()) {
 			if (child instanceof RadioButton
 					&& ((RadioButton) child).isSelected()) {
-				BeerExpertMain.ActiveQuestion.SelectedAnswer = ((RadioButton) child).getText();
+				BeerExpertMain.ActiveQuestion.SelectedAnswers.add(((RadioButton) child).getText());
 			}
 		}
 		
