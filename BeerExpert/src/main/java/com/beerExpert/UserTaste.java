@@ -1,14 +1,18 @@
 package com.beerExpert;
 
 public class UserTaste {
-	public boolean WantsBeer;
-	public boolean IsFlavorRelevant;
+	public String Desire;
+	public String FlavorRelevancy;
+	public boolean KnownFlavorRelevancy;
+	public String Flavor;
 	
 	public UserTaste Populate()
 	{
 		UserTaste newObj = new UserTaste();
-		newObj.WantsBeer = this.WantsBeer;
-		newObj.IsFlavorRelevant = this.IsFlavorRelevant;
+		newObj.Desire = this.Desire;
+		newObj.FlavorRelevancy = this.FlavorRelevancy;
+		newObj.KnownFlavorRelevancy = this.KnownFlavorRelevancy;
+		newObj.Flavor = this.Flavor;
 		return newObj;
 	}
 	

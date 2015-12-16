@@ -14,37 +14,107 @@ rule "Initialize"
 		Question question = new Question();
 		question.QuestionTxt = "Czy chcesz wypiæ piwo?";
 		UserTaste utBeer = new UserTaste();
-		utBeer.WantsBeer = true;
+		utBeer.Desire = "Beer";
         question.Answers.put("Tak", utBeer);
         UserTaste utNoBeer = new UserTaste();
-        utNoBeer.WantsBeer = false;
+        utNoBeer.Desire = "No Beer";
         question.Answers.put("Nie", utNoBeer);
         BeerExpertMain.ActiveQuestion = question;
+        System.out.println("Executed: Initialize");
 end
 
 rule "Idiot"
 	when
-		UserTaste (WantsBeer == false)
+		UserTaste (Desire == "No Beer")
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Idiota";
 		question.Answers.put("OK", null);
 		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Idiot");
 end
 
 rule "Overture"
 	when
-		taste: UserTaste (WantsBeer == true)
+		taste: UserTaste (Desire == "Beer", KnownFlavorRelevancy == false)
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Czy chcesz wypiæ piwo nie zwracaj¹c specjalnej uwagi na jego smak?";
 		
 		UserTaste peasant = taste.Populate();
-		peasant.IsFlavorRelevant = false;
+		peasant.FlavorRelevancy = "peasant";
+		peasant.KnownFlavorRelevancy = true;
 		UserTaste fussy = taste.Populate();
-		fussy.IsFlavorRelevant = true;
+		fussy.FlavorRelevancy = "fussy";
+		fussy.KnownFlavorRelevancy = true;
 		question.Answers.put("Tak", peasant);
 		question.Answers.put("Nie", fussy);
 		
 		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Overture");
+end
+
+rule "CorpoBeer"
+	when 
+		UserTaste (FlavorRelevancy == "peasant")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Jakiej dru¿ynie pi³karskiej kibicujesz?";
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: CorpoBeer");
+end
+
+rule "AskLocation"
+	when 
+		UserTaste (FlavorRelevancy == "fussy")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy chcesz napiæ siê na œwie¿ym powietrzu?";
+		
+		Circumstances freshAir = new Circumstances();
+		freshAir.Location = "Fresh air";
+		Circumstances closedRoom = new Circumstances();
+		closedRoom.Location = "ClosedRoom";
+		question.Answers.put("Tak", freshAir);
+		question.Answers.put("Nie", closedRoom);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskLocation");
+end
+
+rule "AskWeather"
+	when 
+		circumstances: Circumstances (Location == "Fresh air", Weather == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy jest gor¹co?";
+		
+		Circumstances hot = circumstances.Populate();
+		hot.Weather = "Hot";
+		Circumstances cold = circumstances.Populate();
+		cold.Weather = "cold";
+		question.Answers.put("Tak", hot);
+		question.Answers.put("Nie", cold);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskWeather");
+end
+
+rule "AskFlavour"
+	when 
+		Circumstances (Weather =="Hot")
+		taste: UserTaste(Flavor == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Jakiego smaku szukasz?";
+		
+		UserTaste soft = taste.Populate();
+		soft.Flavor = "soft";
+		UserTaste oryginal = taste.Populate();
+		oryginal.Flavor = "oryginal";
+		question.Answers.put("Delikatnego", soft);
+		question.Answers.put("Oryginalnego", oryginal);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskFlavour");
 end
