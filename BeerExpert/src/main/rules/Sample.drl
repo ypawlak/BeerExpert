@@ -39,7 +39,7 @@ rule "Overture"
 		taste: UserTaste (Desire == "Beer", KnownFlavorRelevancy == false)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy chcesz wypiæ piwo nie zwracaj¹c specjalnej uwagi na jego smak?";
+		question.QuestionTxt = "Czy smak piwa jest Ci obojêtny?";
 		
 		UserTaste peasant = taste.Populate();
 		peasant.FlavorRelevancy = "peasant";
@@ -66,7 +66,7 @@ end
 
 rule "AskLocation"
 	when 
-		UserTaste (FlavorRelevancy == "fussy")
+		UserTaste (FlavorRelevancy == "fussy", Flavor == null, Aroma == null)
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Czy chcesz napiæ siê na œwie¿ym powietrzu?";
@@ -92,7 +92,7 @@ rule "AskWeather"
 		Circumstances hot = circumstances.Populate();
 		hot.Weather = "Hot";
 		Circumstances cold = circumstances.Populate();
-		cold.Weather = "cold";
+		cold.Weather = "Cold";
 		question.Answers.put("Tak", hot);
 		question.Answers.put("Nie", cold);
 		
@@ -103,18 +103,145 @@ end
 rule "AskFlavour"
 	when 
 		Circumstances (Weather =="Hot")
-		taste: UserTaste(Flavor == null)
+		taste: UserTaste(KnownFlavorRelevancy == true, Flavor == null)
 	then
 		Question question = new Question();
 		question.QuestionTxt = "Jakiego smaku szukasz?";
 		
 		UserTaste soft = taste.Populate();
-		soft.Flavor = "soft";
+		soft.Flavor = "Soft";
 		UserTaste oryginal = taste.Populate();
-		oryginal.Flavor = "oryginal";
+		oryginal.Flavor = "Oryginal";
 		question.Answers.put("Delikatnego", soft);
 		question.Answers.put("Oryginalnego", oryginal);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskFlavour");
+end
+
+rule "AskGentainHop"
+	when
+		taste: UserTaste (Flavor == "Soft", Hop == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy lubisz goryczkowy smak chmielu?";
+		
+		UserTaste gentain = taste.Populate();
+		gentain.Hop = "Gentain";
+		UserTaste noGentain = taste.Populate();
+		noGentain.Hop = "No gentain";
+		question.Answers.put("Tak", gentain);
+		question.Answers.put("Nie", noGentain);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskGentainHop");
+end
+
+rule "AskMovement"
+	when
+		circumstances: Circumstances (Weather =="Cold", Movement == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy jesteœ w aktywnym ruchu?";
+		
+		Circumstances moving = circumstances.Populate();
+		moving.Movement = "Moving";
+		Circumstances steady = circumstances.Populate();
+		steady.Movement = "Steady";
+		question.Answers.put("Tak", moving);
+		question.Answers.put("Nie", steady);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskMovement");
+end
+
+rule "AskChallenges"
+	when
+		Circumstances (Movement == "Steady")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy lubisz wyzwania?";
+		
+		UserAttitude challenge = new UserAttitude();
+		challenge.Requirements = "Challenge";
+		UserAttitude stable = new UserAttitude();
+		stable.Requirements = "Stable";
+		question.Answers.put("Tak", challenge);
+		question.Answers.put("Nie", stable);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskChallenges");
+end
+
+rule "AskEating"
+	when
+		circumnstances: Circumstances (Movement == "Moving", Destination == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Czy coœ jesz?";
+		
+		Circumstances eating = circumnstances.Populate();
+		eating.Destination = "Eating";
+		Circumstances drinking = circumnstances.Populate();
+		drinking.Destination = "Just drinking";
+		question.Answers.put("Tak", eating);
+		question.Answers.put("Nie", drinking);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskEating");
+end
+
+rule "AskFoodKind"
+	when
+		Circumstances (Destination == "Eating")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Co jesz?";
+		
+		Food snack = new Food();
+		snack.Kind = "Snack";
+		Food dish = new Food();
+		dish.Kind = "Dish";
+		question.Answers.put("Lekk¹ przek¹skê", snack);
+		question.Answers.put("Coœ ciê¿szego", dish);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskFoodKind");
+end
+
+rule "AskDishType"
+	when
+		food: Food (Kind == "Dish", DishType == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Danie g³ówne, czy deser?";
+		
+		Food mainCourse = food.Populate();
+		mainCourse.DishType = "Main course";
+		Food dessert = food.Populate();
+		dessert.DishType = "Dessert";
+		question.Answers.put("Danie g³ówne", mainCourse);
+		question.Answers.put("Deser", dessert);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskDishType");
+end
+
+rule "AskAroma"
+	when
+		Food (DishType == "Main course")
+		taste: UserTaste (Aroma == null, FlavorRelevancy == "fussy")
+	then
+		Question question = new Question();
+		question.QuestionTxt = "Które aromaty preferujesz?";
+		
+		UserTaste fruit = taste.Populate();
+		fruit.Aroma = "Fruit";
+		UserTaste chocolate = taste.Populate();
+		chocolate.Aroma = "Chocolate";
+		question.Answers.put("Owocowe i ¿ywiczne", fruit);
+		question.Answers.put("Czekoladowe i palone", chocolate);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskAroma");
 end

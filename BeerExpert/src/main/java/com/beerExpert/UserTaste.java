@@ -5,6 +5,8 @@ public class UserTaste {
 	public String FlavorRelevancy;
 	public boolean KnownFlavorRelevancy;
 	public String Flavor;
+	public String Hop;
+	public String Aroma;
 	
 	public UserTaste Populate()
 	{
@@ -13,6 +15,8 @@ public class UserTaste {
 		newObj.FlavorRelevancy = this.FlavorRelevancy;
 		newObj.KnownFlavorRelevancy = this.KnownFlavorRelevancy;
 		newObj.Flavor = this.Flavor;
+		newObj.Hop = this.Hop;
+		newObj.Aroma = this.Aroma;
 		return newObj;
 	}
 	
