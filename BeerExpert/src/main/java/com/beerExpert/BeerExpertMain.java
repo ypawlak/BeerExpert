@@ -20,9 +20,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import com.beerExpert.Question;
 
-/**
- * This is a sample class to launch a rule.
- */
 public class BeerExpertMain {
 	private static GuiApp gui;
 	private static KnowledgeBase kbase;

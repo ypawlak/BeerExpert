@@ -12,43 +12,49 @@ rule "Initialize"
 	when
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy chcesz wypiæ piwo?";
+		question.QuestionTxt = MainConsts.InitQuestion;
+		
 		UserTaste utBeer = new UserTaste();
-		utBeer.Desire = "Beer";
-        question.Answers.put("Tak", utBeer);
+		utBeer.Desire = MainConsts.WantsBeer;
+        question.Answers.put(MainConsts.YesAns, utBeer);
         UserTaste utNoBeer = new UserTaste();
-        utNoBeer.Desire = "No Beer";
-        question.Answers.put("Nie", utNoBeer);
+        utNoBeer.Desire = MainConsts.WantsNoBeer;
+        question.Answers.put(MainConsts.NoAns, utNoBeer);
+        
         BeerExpertMain.ActiveQuestion = question;
         System.out.println("Executed: Initialize");
 end
 
 rule "Idiot"
 	when
-		UserTaste (Desire == "No Beer")
+		taste: UserTaste (Desire == MainConsts.WantsNoBeer)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Idiota";
-		question.Answers.put("OK", null);
+		question.QuestionTxt = MainConsts.IdiotQuestion;
+		
+		UserTaste utBeer = taste.Populate();
+		utBeer.Desire = MainConsts.WantsBeer;
+		question.Answers.put(MainConsts.ReflectionAns, utBeer);
+		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: Idiot");
 end
 
 rule "Overture"
 	when
-		taste: UserTaste (Desire == "Beer", KnownFlavorRelevancy == false)
+		taste: UserTaste (Desire == MainConsts.WantsBeer, KnownFlavorRelevancy == false)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy smak piwa jest Ci obojêtny?";
+		question.QuestionTxt = MainConsts.OvertureQuestion;
 		
 		UserTaste peasant = taste.Populate();
-		peasant.FlavorRelevancy = "peasant";
+		peasant.FlavorRelevancy = MainConsts.Peasant;
 		peasant.KnownFlavorRelevancy = true;
 		UserTaste fussy = taste.Populate();
-		fussy.FlavorRelevancy = "fussy";
+		fussy.FlavorRelevancy = MainConsts.Fussy;
 		fussy.KnownFlavorRelevancy = true;
-		question.Answers.put("Tak", peasant);
-		question.Answers.put("Nie", fussy);
+		question.Answers.put(MainConsts.YesAns, peasant);
+		question.Answers.put(MainConsts.NoAns, fussy);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: Overture");
@@ -56,28 +62,29 @@ end
 
 rule "CorpoBeer"
 	when 
-		UserTaste (FlavorRelevancy == "peasant")
+		UserTaste (FlavorRelevancy == MainConsts.Peasant)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Eurolager";
-		answer.SetImage("Eurolager.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Eurolager;
+		answer.SetImage(MainConsts.EurolagerImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: CorpoBeer");
 end
 
 rule "AskLocation"
 	when 
-		UserTaste (FlavorRelevancy == "fussy", Flavor == null, Aroma == null, HopBeer == null, Coffee == null, Bitters == null)
+		UserTaste (FlavorRelevancy == MainConsts.Fussy, Flavor == null, Aroma == null, HopBeer == null, Coffee == null, Bitters == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy chcesz napiæ siê na œwie¿ym powietrzu?";
+		question.QuestionTxt = MainConsts.LocationQuestion;
 		
 		Circumstances freshAir = new Circumstances();
-		freshAir.Location = "Fresh air";
+		freshAir.Location = MainConsts.FreshAir;
 		Circumstances closedRoom = new Circumstances();
-		closedRoom.Location = "Closed room";
-		question.Answers.put("Tak", freshAir);
-		question.Answers.put("Nie", closedRoom);
+		closedRoom.Location = MainConsts.ClosedRoom;
+		question.Answers.put(MainConsts.YesAns, freshAir);
+		question.Answers.put(MainConsts.NoAns, closedRoom);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskLocation");
@@ -85,17 +92,17 @@ end
 
 rule "AskWeather"
 	when 
-		circumstances: Circumstances (Location == "Fresh air", Weather == null)
+		circumstances: Circumstances (Location == MainConsts.FreshAir, Weather == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy jest gor¹co?";
+		question.QuestionTxt = MainConsts.WeatherQuestion;
 		
 		Circumstances hot = circumstances.Populate();
-		hot.Weather = "Hot";
+		hot.Weather = MainConsts.Hot;
 		Circumstances cold = circumstances.Populate();
-		cold.Weather = "Cold";
-		question.Answers.put("Tak", hot);
-		question.Answers.put("Nie", cold);
+		cold.Weather = MainConsts.Cold;
+		question.Answers.put(MainConsts.YesAns, hot);
+		question.Answers.put(MainConsts.NoAns, cold);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskWeather");
@@ -103,18 +110,18 @@ end
 
 rule "AskFlavour"
 	when 
-		Circumstances (Weather =="Hot")
+		Circumstances (Weather == MainConsts.Hot)
 		taste: UserTaste(KnownFlavorRelevancy == true, Flavor == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Jakiego smaku szukasz?";
+		question.QuestionTxt = MainConsts.FlavourQuestion;
 		
 		UserTaste soft = taste.Populate();
-		soft.Flavor = "Soft";
+		soft.Flavor = MainConsts.Soft;
 		UserTaste oryginal = taste.Populate();
-		oryginal.Flavor = "Oryginal";
-		question.Answers.put("Delikatnego", soft);
-		question.Answers.put("Oryginalnego", oryginal);
+		oryginal.Flavor = MainConsts.Oryginal;
+		question.Answers.put(MainConsts.SoftAns, soft);
+		question.Answers.put(MainConsts.OryginalAns, oryginal);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskFlavour");
@@ -122,17 +129,17 @@ end
 
 rule "AskGentainHop"
 	when
-		taste: UserTaste (Flavor == "Soft", Hop == null)
+		taste: UserTaste (Flavor == MainConsts.Soft, Hop == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy lubisz goryczkowy smak chmielu?";
+		question.QuestionTxt = MainConsts.GentainHopQuestion;
 		
 		UserTaste gentain = taste.Populate();
-		gentain.Hop = "Gentain";
+		gentain.Hop = MainConsts.Gentain;
 		UserTaste noGentain = taste.Populate();
-		noGentain.Hop = "No gentain";
-		question.Answers.put("Tak", gentain);
-		question.Answers.put("Nie", noGentain);
+		noGentain.Hop = MainConsts.NoGentain;
+		question.Answers.put(MainConsts.YesAns, gentain);
+		question.Answers.put(MainConsts.NoAns, noGentain);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskGentainHop");
@@ -140,17 +147,17 @@ end
 
 rule "AskMovement"
 	when
-		circumstances: Circumstances (Weather =="Cold", Movement == null)
+		circumstances: Circumstances (Weather == MainConsts.Cold, Movement == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy jesteœ w aktywnym ruchu?";
+		question.QuestionTxt = MainConsts.MovementQuestion;
 		
 		Circumstances moving = circumstances.Populate();
-		moving.Movement = "Moving";
+		moving.Movement = MainConsts.Moving;
 		Circumstances steady = circumstances.Populate();
-		steady.Movement = "Steady";
-		question.Answers.put("Tak", moving);
-		question.Answers.put("Nie", steady);
+		steady.Movement = MainConsts.Steady;
+		question.Answers.put(MainConsts.YesAns, moving);
+		question.Answers.put(MainConsts.NoAns, steady);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskMovement");
@@ -158,17 +165,17 @@ end
 
 rule "AskChallenges"
 	when
-		Circumstances (Movement == "Steady")
+		Circumstances (Movement == MainConsts.Steady)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy lubisz wyzwania?";
+		question.QuestionTxt = MainConsts.ChallengesQuestion;
 		
 		UserAttitude challenge = new UserAttitude();
-		challenge.Requirements = "Challenge";
+		challenge.Requirements = MainConsts.Challenge;
 		UserAttitude stable = new UserAttitude();
-		stable.Requirements = "Stable";
-		question.Answers.put("Tak", challenge);
-		question.Answers.put("Nie", stable);
+		stable.Requirements = MainConsts.Stable;
+		question.Answers.put(MainConsts.YesAns, challenge);
+		question.Answers.put(MainConsts.NoAns, stable);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskChallenges");
@@ -176,17 +183,17 @@ end
 
 rule "AskEating"
 	when
-		circumnstances: Circumstances (Movement == "Moving", Destination == null)
+		circumnstances: Circumstances (Movement == MainConsts.Moving, Destination == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy coœ jesz?";
+		question.QuestionTxt = MainConsts.EatingQuestion;
 		
 		Circumstances eating = circumnstances.Populate();
-		eating.Destination = "Eating";
+		eating.Destination = MainConsts.Eating;
 		Circumstances drinking = circumnstances.Populate();
-		drinking.Destination = "Just drinking";
-		question.Answers.put("Tak", eating);
-		question.Answers.put("Nie", drinking);
+		drinking.Destination = MainConsts.JustDrinking;
+		question.Answers.put(MainConsts.YesAns, eating);
+		question.Answers.put(MainConsts.NoAns, drinking);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskEating");
@@ -194,17 +201,17 @@ end
 
 rule "AskFoodKind"
 	when
-		Circumstances (Destination == "Eating")
+		Circumstances (Destination == MainConsts.Eating)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Co jesz?";
+		question.QuestionTxt = MainConsts.FoodKindQuestion;
 		
 		Food snack = new Food();
-		snack.Kind = "Snack";
+		snack.Kind = MainConsts.Snack;
 		Food dish = new Food();
-		dish.Kind = "Dish";
-		question.Answers.put("Lekk¹ przek¹skê", snack);
-		question.Answers.put("Coœ ciê¿szego", dish);
+		dish.Kind = MainConsts.Dish;
+		question.Answers.put(MainConsts.SnackAns, snack);
+		question.Answers.put(MainConsts.DishAns, dish);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskFoodKind");
@@ -212,17 +219,17 @@ end
 
 rule "AskDishType"
 	when
-		food: Food (Kind == "Dish", DishType == null)
+		food: Food (Kind == MainConsts.Dish, DishType == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Danie g³ówne, czy deser?";
+		question.QuestionTxt = MainConsts.DishTypeQuestion;
 		
 		Food mainCourse = food.Populate();
-		mainCourse.DishType = "Main course";
+		mainCourse.DishType = MainConsts.MainCourse;
 		Food dessert = food.Populate();
-		dessert.DishType = "Dessert";
-		question.Answers.put("Danie g³ówne", mainCourse);
-		question.Answers.put("Deser", dessert);
+		dessert.DishType = MainConsts.Dessert;
+		question.Answers.put(MainConsts.MainCourseAns, mainCourse);
+		question.Answers.put(MainConsts.DessertAns, dessert);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskDishType");
@@ -230,18 +237,18 @@ end
 
 rule "AskAroma"
 	when
-		Food (DishType == "Main course")
-		taste: UserTaste (Aroma == null, FlavorRelevancy == "fussy")
+		Food (DishType == MainConsts.MainCourse)
+		taste: UserTaste (Aroma == null, FlavorRelevancy == MainConsts.Fussy)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Które aromaty preferujesz?";
+		question.QuestionTxt = MainConsts.AromaQuestion;
 		
 		UserTaste fruit = taste.Populate();
-		fruit.Aroma = "Fruit";
+		fruit.Aroma = MainConsts.Fruit;
 		UserTaste chocolate = taste.Populate();
-		chocolate.Aroma = "Chocolate";
-		question.Answers.put("Owocowe i ¿ywiczne", fruit);
-		question.Answers.put("Czekoladowe i palone", chocolate);
+		chocolate.Aroma = MainConsts.Chocolate;
+		question.Answers.put(MainConsts.FruitAns, fruit);
+		question.Answers.put(MainConsts.ChocolateAns, chocolate);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskAroma");
@@ -249,21 +256,21 @@ end
 
 rule "AskHopBeer"
 	when
-		(Circumstances (Destination == "Just drinking")
+		(Circumstances (Destination == MainConsts.JustDrinking)
 		and
-		taste: UserTaste(FlavorRelevancy == "fussy", HopBeer == null))
+		taste: UserTaste(FlavorRelevancy == MainConsts.Fussy, HopBeer == null))
 		or
-		taste: UserTaste (Sour == "No", HopBeer == null)
+		taste: UserTaste (Sour == MainConsts.No, HopBeer == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy lubisz chmielowe piwa?";
+		question.QuestionTxt = MainConsts.HopBeerQuestion;
 		
 		UserTaste hopBeer = taste.Populate();
-		hopBeer.HopBeer = "Yes";
+		hopBeer.HopBeer = MainConsts.Yes;
 		UserTaste noHopBeer = taste.Populate();
-		noHopBeer.HopBeer = "No";
-		question.Answers.put("Tak", hopBeer);
-		question.Answers.put("Nie", noHopBeer);
+		noHopBeer.HopBeer = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, hopBeer);
+		question.Answers.put(MainConsts.NoAns, noHopBeer);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskHopBeer");
@@ -271,17 +278,17 @@ end
 
 rule "AskWinter"
 	when 
-		circumstances: Circumstances (Location == "Closed room", SituationOutside == null)
+		circumstances: Circumstances (Location == MainConsts.ClosedRoom, SituationOutside == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy jest ch³odna zimowa noc?";
+		question.QuestionTxt = MainConsts.WinterQuestion;
 		
 		Circumstances winterNight = circumstances.Populate();
-		winterNight.SituationOutside = "Winter night";
+		winterNight.SituationOutside = MainConsts.WinterNight;
 		Circumstances noWinterNight = circumstances.Populate();
-		noWinterNight.SituationOutside = "No winter night";
-		question.Answers.put("Tak", winterNight);
-		question.Answers.put("Nie", noWinterNight);
+		noWinterNight.SituationOutside = MainConsts.NoWinterNight;
+		question.Answers.put(MainConsts.YesAns, winterNight);
+		question.Answers.put(MainConsts.NoAns, noWinterNight);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskWinter");
@@ -289,17 +296,17 @@ end
 
 rule "AskStrength"
 	when 
-		Circumstances (SituationOutside == "Winter night")
+		Circumstances (SituationOutside == MainConsts.WinterNight)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy piwo ma lekko uderzyc do g³owy?";
+		question.QuestionTxt = MainConsts.StrengthQuestion;
 		
 		UserAttitude strong = new UserAttitude();
-		strong.Strength = "Strong";
+		strong.Strength = MainConsts.Strong;
 		UserAttitude weak = new UserAttitude();
-		weak.Strength = "Weak";
-		question.Answers.put("Tak", strong);
-		question.Answers.put("Nie", weak);
+		weak.Strength = MainConsts.Weak;
+		question.Answers.put(MainConsts.YesAns, strong);
+		question.Answers.put(MainConsts.NoAns, weak);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskStrength");
@@ -307,18 +314,18 @@ end
 
 rule "AskCoffee"
 	when 
-		UserAttitude(Strength == "Strong");
-		taste: UserTaste(FlavorRelevancy == "fussy", Coffee == null)
+		UserAttitude(Strength == MainConsts.Strong);
+		taste: UserTaste(FlavorRelevancy == MainConsts.Fussy, Coffee == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy lubisz palon¹ kawê?";
+		question.QuestionTxt = MainConsts.CofeeQuestion;
 		
 		UserTaste coffee = taste.Populate();
-		coffee.Coffee = "Yes";
+		coffee.Coffee = MainConsts.Yes;
 		UserTaste noCoffee = taste.Populate();
-		noCoffee.Coffee = "No";
-		question.Answers.put("Tak", coffee);
-		question.Answers.put("Nie", noCoffee);
+		noCoffee.Coffee = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, coffee);
+		question.Answers.put(MainConsts.NoAns, noCoffee);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskCoffee");
@@ -326,18 +333,18 @@ end
 
 rule "AskBitters"
 	when 
-		Circumstances (SituationOutside == "No winter night")
-		taste: UserTaste (FlavorRelevancy == "fussy", Bitters == null)
+		Circumstances (SituationOutside == MainConsts.NoWinterNight)
+		taste: UserTaste (FlavorRelevancy == MainConsts.Fussy, Bitters == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy chcesz coœ goryczkowego?";
+		question.QuestionTxt = MainConsts.BittersQuestion;
 		
 		UserTaste bitters = taste.Populate();
-		bitters.Bitters = "Yes";
+		bitters.Bitters = MainConsts.Yes;
 		UserTaste noBitters = taste.Populate();
-		noBitters.Bitters = "No";
-		question.Answers.put("Tak", bitters);
-		question.Answers.put("Nie", noBitters);
+		noBitters.Bitters = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, bitters);
+		question.Answers.put(MainConsts.NoAns, noBitters);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskBitters");
@@ -345,17 +352,17 @@ end
 
 rule "AskSour"
 	when 
-		taste: UserTaste (FlavorRelevancy == "fussy", Bitters == "No", Sour == null)
+		taste: UserTaste (FlavorRelevancy == MainConsts.Fussy, Bitters == MainConsts.No, Sour == null)
 	then
 		Question question = new Question();
-		question.QuestionTxt = "Czy lubisz kwaœne cukierki?";
+		question.QuestionTxt = MainConsts.SourQuestion;
 		
 		UserTaste sour = taste.Populate();
-		sour.Sour = "Yes";
+		sour.Sour = MainConsts.Yes;
 		UserTaste noSour = taste.Populate();
-		noSour.Sour = "No";
-		question.Answers.put("Tak", sour);
-		question.Answers.put("Nie", noSour);
+		noSour.Sour = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, sour);
+		question.Answers.put(MainConsts.NoAns, noSour);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: AskSour");
@@ -363,201 +370,219 @@ end
 
 rule "GentainHop"
 	when 
-		UserTaste (Hop == "Gentain")
+		UserTaste (Hop == MainConsts.Gentain)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Pilzner";
-		answer.SetImage("Pilzner.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Pilzner;
+		answer.SetImage(MainConsts.PilznerImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: GentainHop");
 end
 
 rule "NoChallenges"
 	when 
-		UserAttitude (Requirements == "Stable")
+		UserAttitude (Requirements == MainConsts.Stable)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Pilzner";
-		answer.SetImage("Pilzner.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Pilzner;
+		answer.SetImage(MainConsts.PilznerImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoChallenges");
 end
 
 rule "NoGentainHop"
 	when 
-		UserTaste (Hop == "No gentain")
+		UserTaste (Hop == MainConsts.NoGentain)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
-		answer.SetImage("Pszeniczne.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Wheat;
+		answer.SetImage(MainConsts.WheatImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoGentainHop");
 end
 
 rule "EatsSnacks"
 	when 
-		Food (Kind == "Snack")
+		Food (Kind == MainConsts.Snack)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Piwo pszeniczne";
-		answer.SetImage("Pszeniczne.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Wheat;
+		answer.SetImage(MainConsts.WheatImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: EatsSnacks");
 end
 
 rule "OryginalTaste"
 	when 
-		UserTaste (Flavor == "Oryginal")
+		UserTaste (Flavor == MainConsts.Oryginal)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		answer.SetImage("Farmhouse.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: OryginalTaste");
 end
 
 rule "DrinkingNoHop"
 	when 
-		UserTaste (HopBeer == "No")
-		Circumstances (Destination == "Just drinking")
+		UserTaste (HopBeer == MainConsts.No)
+		Circumstances (Destination == MainConsts.JustDrinking)
 		
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		answer.SetImage("Farmhouse.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: DrinkingNoHop");
 end
 
 rule "Challenges"
 	when 
-		UserAttitude (Requirements == "Challenge")	
+		UserAttitude (Requirements == MainConsts.Challenge)	
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Farmhouse / Saison";
-		answer.SetImage("Farmhouse.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Challenges");
 end
 
 rule "Chocolate"
 	when 
-		UserTaste (Aroma == "Chocolate")
+		UserTaste (Aroma == MainConsts.Chocolate)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		answer.SetImage("Porter.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Chocolate");
 end
 
 rule "Weak"
 	when 
-		UserAttitude (Strength == "Weak")
+		UserAttitude (Strength == MainConsts.Weak)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		answer.SetImage("Porter.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Strong");
 end
 
 rule "NoSourNoHop"
 	when 
-		UserTaste (Sour == "No", HopBeer == "No")
+		UserTaste (Sour == MainConsts.No, HopBeer == MainConsts.No)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Porter lub Stout";
-		answer.SetImage("Porter.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoSourNoHop");
 end
 
 rule "NoSourHop"
 	when 
-		UserTaste (Sour == "No", HopBeer == "Yes")
+		UserTaste (Sour == MainConsts.No, HopBeer == MainConsts.Yes)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Pale Ale";
-		answer.SetImage("PaleAle.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.PaleAle;
+		answer.SetImage(MainConsts.PaleAleImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoSourHop");
 end
 
 rule "DrinkingHop"
 	when 
-		UserTaste (HopBeer == "Yes")
-		Circumstances (Destination == "Just drinking")
+		UserTaste (HopBeer == MainConsts.Yes)
+		Circumstances (Destination == MainConsts.JustDrinking)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Pale Ale";
-		answer.SetImage("PaleAle.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.PaleAle;
+		answer.SetImage(MainConsts.PaleAleImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: DrinkingHop");
 end
 
 rule "Bitters"
 	when 
-		UserTaste (Bitters == "Yes")
+		UserTaste (Bitters == MainConsts.Yes)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "IPA";
-		answer.SetImage("IPA.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.IPA;
+		answer.SetImage(MainConsts.IPAImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Bitters");
 end
 
 rule "Fruit"
 	when 
-		UserTaste (Aroma == "Fruit")
+		UserTaste (Aroma == MainConsts.Fruit)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "IPA";
-		answer.SetImage("IPA.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.IPA;
+		answer.SetImage(MainConsts.IPAImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Fruit");
 end
 
 rule "Coffee"
 	when 
-		UserTaste (Coffee == "Yes")
+		UserTaste (Coffee == MainConsts.Yes)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Rosyjski Imperialny Stout";
-		answer.SetImage("Russian.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.RussianStout;
+		answer.SetImage(MainConsts.RussianImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Coffee");
 end
 
 rule "Sour"
 	when 
-		UserTaste (Sour == "Yes")
+		UserTaste (Sour == MainConsts.Yes)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Sour";
-		answer.SetImage("Sour.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Sour;
+		answer.SetImage(MainConsts.SourImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Sour");
 end
 
 rule "Dessert"
 	when 
-		Food (DishType == "Dessert")
+		Food (DishType == MainConsts.Dessert)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Sour";
-		answer.SetImage("Sour.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Sour;
+		answer.SetImage(MainConsts.SourImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: Dessert");
 end
 
 rule "NoCoffee"
 	when 
-		UserTaste (Coffee == "No")
+		UserTaste (Coffee == MainConsts.No)
 	then
 		Answer answer = new Answer();
-		answer.AnswerTxt = MainConsts.ChosenBeer + "Barley Wine";
-		answer.SetImage("Barley.jpg");
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.BarleyWine;
+		answer.SetImage(MainConsts.BarleyWineImg);
+		
 		BeerExpertMain.SelectedAnswer = answer;
 		System.out.println("Executed: NoCoffee");
 end
