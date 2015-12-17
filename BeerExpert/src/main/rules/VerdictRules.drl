@@ -1,0 +1,232 @@
+package com.beerExpert
+
+rule "CorpoBeer"
+	when 
+		UserTaste (FlavorRelevancy == MainConsts.Peasant)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Eurolager;
+		answer.SetImage(MainConsts.EurolagerImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: CorpoBeer");
+end
+
+rule "GentainHop"
+	when 
+		UserTaste (Hop == MainConsts.Gentain)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Pilzner;
+		answer.SetImage(MainConsts.PilznerImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: GentainHop");
+end
+
+rule "NoChallenges"
+	when 
+		UserAttitude (Requirements == MainConsts.Stable)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Pilzner;
+		answer.SetImage(MainConsts.PilznerImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: NoChallenges");
+end
+
+rule "NoGentainHop"
+	when 
+		UserTaste (Hop == MainConsts.NoGentain)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Wheat;
+		answer.SetImage(MainConsts.WheatImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: NoGentainHop");
+end
+
+rule "EatsSnacks"
+	when 
+		Food (Kind == MainConsts.Snack)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Wheat;
+		answer.SetImage(MainConsts.WheatImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: EatsSnacks");
+end
+
+rule "OryginalTaste"
+	when 
+		UserTaste (Flavor == MainConsts.Oryginal)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: OryginalTaste");
+end
+
+rule "DrinkingNoHop"
+	when 
+		UserTaste (HopBeer == MainConsts.No)
+		Circumstances (Destination == MainConsts.JustDrinking)
+		
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: DrinkingNoHop");
+end
+
+rule "Challenges"
+	when 
+		UserAttitude (Requirements == MainConsts.Challenge)	
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Farmhouse;
+		answer.SetImage(MainConsts.FarmhouseImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Challenges");
+end
+
+rule "Chocolate"
+	when 
+		UserTaste (Aroma == MainConsts.Chocolate)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Chocolate");
+end
+
+rule "Weak"
+	when 
+		UserAttitude (Strength == MainConsts.Weak)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Strong");
+end
+
+rule "NoSourNoHop"
+	when 
+		UserTaste (Sour == MainConsts.No, HopBeer == MainConsts.No)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Porter;
+		answer.SetImage(MainConsts.PorterImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: NoSourNoHop");
+end
+
+rule "NoSourHop"
+	when 
+		UserTaste (Sour == MainConsts.No, HopBeer == MainConsts.Yes)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.PaleAle;
+		answer.SetImage(MainConsts.PaleAleImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: NoSourHop");
+end
+
+rule "DrinkingHop"
+	when 
+		UserTaste (HopBeer == MainConsts.Yes)
+		Circumstances (Destination == MainConsts.JustDrinking)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.PaleAle;
+		answer.SetImage(MainConsts.PaleAleImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: DrinkingHop");
+end
+
+rule "Bitters"
+	when 
+		UserTaste (Bitters == MainConsts.Yes)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.IPA;
+		answer.SetImage(MainConsts.IPAImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Bitters");
+end
+
+rule "Fruit"
+	when 
+		UserTaste (Aroma == MainConsts.Fruit)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.IPA;
+		answer.SetImage(MainConsts.IPAImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Fruit");
+end
+
+rule "Coffee"
+	when 
+		UserTaste (Coffee == MainConsts.Yes)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.RussianStout;
+		answer.SetImage(MainConsts.RussianImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Coffee");
+end
+
+rule "Sour"
+	when 
+		UserTaste (Sour == MainConsts.Yes)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Sour;
+		answer.SetImage(MainConsts.SourImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Sour");
+end
+
+rule "Dessert"
+	when 
+		Food (DishType == MainConsts.Dessert)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.Sour;
+		answer.SetImage(MainConsts.SourImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: Dessert");
+end
+
+rule "NoCoffee"
+	when 
+		UserTaste (Coffee == MainConsts.No)
+	then
+		Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.ChosenBeer + MainConsts.BarleyWine;
+		answer.SetImage(MainConsts.BarleyWineImg);
+		
+		BeerExpertMain.SelectedAnswer = answer;
+		System.out.println("Executed: NoCoffee");
+end

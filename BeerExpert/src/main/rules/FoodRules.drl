@@ -1,0 +1,37 @@
+package com.beerExpert
+
+rule "AskFoodKind"
+	when
+		Circumstances (Destination == MainConsts.Eating)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.FoodKindQuestion;
+		
+		Food snack = new Food();
+		snack.Kind = MainConsts.Snack;
+		Food dish = new Food();
+		dish.Kind = MainConsts.Dish;
+		question.Answers.put(MainConsts.SnackAns, snack);
+		question.Answers.put(MainConsts.DishAns, dish);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskFoodKind");
+end
+
+rule "AskDishType"
+	when
+		food: Food (Kind == MainConsts.Dish, DishType == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.DishTypeQuestion;
+		
+		Food mainCourse = food.Populate();
+		mainCourse.DishType = MainConsts.MainCourse;
+		Food dessert = food.Populate();
+		dessert.DishType = MainConsts.Dessert;
+		question.Answers.put(MainConsts.MainCourseAns, mainCourse);
+		question.Answers.put(MainConsts.DessertAns, dessert);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskDishType");
+end

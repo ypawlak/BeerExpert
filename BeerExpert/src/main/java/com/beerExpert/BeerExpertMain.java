@@ -67,7 +67,17 @@ public class BeerExpertMain {
 	private static KnowledgeBase readKnowledgeBase() throws Exception {
 		KnowledgeBuilder kbuilder = KnowledgeBuilderFactory
 				.newKnowledgeBuilder();
-		kbuilder.add(ResourceFactory.newClassPathResource("Sample.drl"),
+		kbuilder.add(ResourceFactory.newClassPathResource("InitRules.drl"),
+				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("TasteRules.drl"),
+				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("VerdictRules.drl"),
+				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("CircumstancesRules.drl"),
+				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("AttitudeRules.drl"),
+				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("FoodRules.drl"),
 				ResourceType.DRL);
 		KnowledgeBuilderErrors errors = kbuilder.getErrors();
 		if (errors.size() > 0) {

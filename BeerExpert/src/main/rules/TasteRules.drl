@@ -1,0 +1,155 @@
+package com.beerExpert
+
+rule "Overture"
+	when
+		taste: UserTaste (Desire == MainConsts.WantsBeer, KnownFlavorRelevancy == false)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.OvertureQuestion;
+		
+		UserTaste peasant = taste.Populate();
+		peasant.FlavorRelevancy = MainConsts.Peasant;
+		peasant.KnownFlavorRelevancy = true;
+		UserTaste fussy = taste.Populate();
+		fussy.FlavorRelevancy = MainConsts.Fussy;
+		fussy.KnownFlavorRelevancy = true;
+		question.Answers.put(MainConsts.YesAns, peasant);
+		question.Answers.put(MainConsts.NoAns, fussy);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Overture");
+end
+
+rule "AskFlavour"
+	when 
+		Circumstances (Weather == MainConsts.Hot)
+		taste: UserTaste(KnownFlavorRelevancy == true, Flavor == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.FlavourQuestion;
+		
+		UserTaste soft = taste.Populate();
+		soft.Flavor = MainConsts.Soft;
+		UserTaste oryginal = taste.Populate();
+		oryginal.Flavor = MainConsts.Oryginal;
+		question.Answers.put(MainConsts.SoftAns, soft);
+		question.Answers.put(MainConsts.OryginalAns, oryginal);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskFlavour");
+end
+
+rule "AskGentainHop"
+	when
+		taste: UserTaste (Flavor == MainConsts.Soft, Hop == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.GentainHopQuestion;
+		
+		UserTaste gentain = taste.Populate();
+		gentain.Hop = MainConsts.Gentain;
+		UserTaste noGentain = taste.Populate();
+		noGentain.Hop = MainConsts.NoGentain;
+		question.Answers.put(MainConsts.YesAns, gentain);
+		question.Answers.put(MainConsts.NoAns, noGentain);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskGentainHop");
+end
+
+rule "AskAroma"
+	when
+		Food (DishType == MainConsts.MainCourse)
+		taste: UserTaste (Aroma == null, FlavorRelevancy == MainConsts.Fussy)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.AromaQuestion;
+		
+		UserTaste fruit = taste.Populate();
+		fruit.Aroma = MainConsts.Fruit;
+		UserTaste chocolate = taste.Populate();
+		chocolate.Aroma = MainConsts.Chocolate;
+		question.Answers.put(MainConsts.FruitAns, fruit);
+		question.Answers.put(MainConsts.ChocolateAns, chocolate);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskAroma");
+end
+
+rule "AskHopBeer"
+	when
+		(Circumstances (Destination == MainConsts.JustDrinking)
+		and
+		taste: UserTaste(FlavorRelevancy == MainConsts.Fussy, HopBeer == null))
+		or
+		taste: UserTaste (Sour == MainConsts.No, HopBeer == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.HopBeerQuestion;
+		
+		UserTaste hopBeer = taste.Populate();
+		hopBeer.HopBeer = MainConsts.Yes;
+		UserTaste noHopBeer = taste.Populate();
+		noHopBeer.HopBeer = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, hopBeer);
+		question.Answers.put(MainConsts.NoAns, noHopBeer);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskHopBeer");
+end
+
+rule "AskCoffee"
+	when 
+		UserAttitude(Strength == MainConsts.Strong);
+		taste: UserTaste(FlavorRelevancy == MainConsts.Fussy, Coffee == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.CofeeQuestion;
+		
+		UserTaste coffee = taste.Populate();
+		coffee.Coffee = MainConsts.Yes;
+		UserTaste noCoffee = taste.Populate();
+		noCoffee.Coffee = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, coffee);
+		question.Answers.put(MainConsts.NoAns, noCoffee);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskCoffee");
+end
+
+rule "AskBitters"
+	when 
+		Circumstances (SituationOutside == MainConsts.NoWinterNight)
+		taste: UserTaste (FlavorRelevancy == MainConsts.Fussy, Bitters == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.BittersQuestion;
+		
+		UserTaste bitters = taste.Populate();
+		bitters.Bitters = MainConsts.Yes;
+		UserTaste noBitters = taste.Populate();
+		noBitters.Bitters = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, bitters);
+		question.Answers.put(MainConsts.NoAns, noBitters);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskBitters");
+end
+
+rule "AskSour"
+	when 
+		taste: UserTaste (FlavorRelevancy == MainConsts.Fussy, Bitters == MainConsts.No, Sour == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.SourQuestion;
+		
+		UserTaste sour = taste.Populate();
+		sour.Sour = MainConsts.Yes;
+		UserTaste noSour = taste.Populate();
+		noSour.Sour = MainConsts.No;
+		question.Answers.put(MainConsts.YesAns, sour);
+		question.Answers.put(MainConsts.NoAns, noSour);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskSour");
+end

@@ -1,0 +1,33 @@
+package com.beerExpert
+
+rule "Initialize"
+	when
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.InitQuestion;
+		
+		UserTaste utBeer = new UserTaste();
+		utBeer.Desire = MainConsts.WantsBeer;
+        question.Answers.put(MainConsts.YesAns, utBeer);
+        UserTaste utNoBeer = new UserTaste();
+        utNoBeer.Desire = MainConsts.WantsNoBeer;
+        question.Answers.put(MainConsts.NoAns, utNoBeer);
+        
+        BeerExpertMain.ActiveQuestion = question;
+        System.out.println("Executed: Initialize");
+end
+
+rule "Idiot"
+	when
+		taste: UserTaste (Desire == MainConsts.WantsNoBeer)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.IdiotQuestion;
+		
+		UserTaste utBeer = taste.Populate();
+		utBeer.Desire = MainConsts.WantsBeer;
+		question.Answers.put(MainConsts.ReflectionAns, utBeer);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: Idiot");
+end

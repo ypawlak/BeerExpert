@@ -1,0 +1,37 @@
+package com.beerExpert
+
+rule "AskChallenges"
+	when
+		Circumstances (Movement == MainConsts.Steady)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.ChallengesQuestion;
+		
+		UserAttitude challenge = new UserAttitude();
+		challenge.Requirements = MainConsts.Challenge;
+		UserAttitude stable = new UserAttitude();
+		stable.Requirements = MainConsts.Stable;
+		question.Answers.put(MainConsts.YesAns, challenge);
+		question.Answers.put(MainConsts.NoAns, stable);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskChallenges");
+end
+
+rule "AskStrength"
+	when 
+		Circumstances (SituationOutside == MainConsts.WinterNight)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.StrengthQuestion;
+		
+		UserAttitude strong = new UserAttitude();
+		strong.Strength = MainConsts.Strong;
+		UserAttitude weak = new UserAttitude();
+		weak.Strength = MainConsts.Weak;
+		question.Answers.put(MainConsts.YesAns, strong);
+		question.Answers.put(MainConsts.NoAns, weak);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskStrength");
+end

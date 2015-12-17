@@ -1,0 +1,91 @@
+package com.beerExpert
+
+rule "AskLocation"
+	when 
+		UserTaste (FlavorRelevancy == MainConsts.Fussy, Flavor == null, Aroma == null, HopBeer == null, Coffee == null, Bitters == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.LocationQuestion;
+		
+		Circumstances freshAir = new Circumstances();
+		freshAir.Location = MainConsts.FreshAir;
+		Circumstances closedRoom = new Circumstances();
+		closedRoom.Location = MainConsts.ClosedRoom;
+		question.Answers.put(MainConsts.YesAns, freshAir);
+		question.Answers.put(MainConsts.NoAns, closedRoom);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskLocation");
+end
+
+rule "AskWeather"
+	when 
+		circumstances: Circumstances (Location == MainConsts.FreshAir, Weather == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.WeatherQuestion;
+		
+		Circumstances hot = circumstances.Populate();
+		hot.Weather = MainConsts.Hot;
+		Circumstances cold = circumstances.Populate();
+		cold.Weather = MainConsts.Cold;
+		question.Answers.put(MainConsts.YesAns, hot);
+		question.Answers.put(MainConsts.NoAns, cold);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskWeather");
+end
+
+rule "AskMovement"
+	when
+		circumstances: Circumstances (Weather == MainConsts.Cold, Movement == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.MovementQuestion;
+		
+		Circumstances moving = circumstances.Populate();
+		moving.Movement = MainConsts.Moving;
+		Circumstances steady = circumstances.Populate();
+		steady.Movement = MainConsts.Steady;
+		question.Answers.put(MainConsts.YesAns, moving);
+		question.Answers.put(MainConsts.NoAns, steady);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskMovement");
+end
+
+rule "AskEating"
+	when
+		circumnstances: Circumstances (Movement == MainConsts.Moving, Destination == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.EatingQuestion;
+		
+		Circumstances eating = circumnstances.Populate();
+		eating.Destination = MainConsts.Eating;
+		Circumstances drinking = circumnstances.Populate();
+		drinking.Destination = MainConsts.JustDrinking;
+		question.Answers.put(MainConsts.YesAns, eating);
+		question.Answers.put(MainConsts.NoAns, drinking);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskEating");
+end
+
+rule "AskWinter"
+	when 
+		circumstances: Circumstances (Location == MainConsts.ClosedRoom, SituationOutside == null)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.WinterQuestion;
+		
+		Circumstances winterNight = circumstances.Populate();
+		winterNight.SituationOutside = MainConsts.WinterNight;
+		Circumstances noWinterNight = circumstances.Populate();
+		noWinterNight.SituationOutside = MainConsts.NoWinterNight;
+		question.Answers.put(MainConsts.YesAns, winterNight);
+		question.Answers.put(MainConsts.NoAns, noWinterNight);
+		
+		BeerExpertMain.ActiveQuestion = question;
+		System.out.println("Executed: AskWinter");
+end
