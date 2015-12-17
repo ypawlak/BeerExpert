@@ -28,7 +28,7 @@ public class MainConsts {
 	//region ANSWERS
 	public static final String YesAns = "Tak";
 	public static final String NoAns = "Nie";
-	public static final String ReflectionAns = "OK, jednak chcê";
+	public static final String ReflectionAns = "OK";
 	public static final String SoftAns = "Delikatnego";
 	public static final String OryginalAns = "Oryginalnego";
 	public static final String SnackAns = "Lekk¹ przek¹skê";
@@ -70,6 +70,7 @@ public class MainConsts {
 	public static final String NoWinterNight = "No winter night";
 	public static final String Strong = "Strong";
 	public static final String Weak = "Weak";
+	public static final String NewHope = "NewHope";
 	//endregion
 	
 	//region BEERS

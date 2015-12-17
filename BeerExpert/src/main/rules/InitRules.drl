@@ -25,9 +25,27 @@ rule "Idiot"
 		question.QuestionTxt = MainConsts.IdiotQuestion;
 		
 		UserTaste utBeer = taste.Populate();
-		utBeer.Desire = MainConsts.WantsBeer;
+		utBeer.Desire = MainConsts.NewHope;
 		question.Answers.put(MainConsts.ReflectionAns, utBeer);
 		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: Idiot");
+end
+
+rule "InitializeAgain"
+	when
+	taste: UserTaste (Desire == MainConsts.NewHope)
+	then
+		Question question = new Question();
+		question.QuestionTxt = MainConsts.InitQuestion;
+		
+		UserTaste utBeer = taste.Populate();
+		utBeer.Desire = MainConsts.WantsBeer;
+        question.Answers.put(MainConsts.YesAns, utBeer);
+        UserTaste utNoBeer = taste.Populate();
+        utNoBeer.Desire = MainConsts.WantsNoBeer;
+        question.Answers.put(MainConsts.NoAns, utNoBeer);
+        
+        BeerExpertMain.ActiveQuestion = question;
+        System.out.println("Executed: InitializeAgain");
 end
