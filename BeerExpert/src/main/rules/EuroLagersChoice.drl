@@ -1,0 +1,232 @@
+//created on: 2015-12-17
+package com.beerExpert
+
+//list any import classes here.
+//declare any global variables here
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+
+rule "NeedConcrete"
+
+    when
+        UserAttitude (AnswerAccuracy == MainConsts.Concrete)
+    then
+        Question question = new Question();
+		question.QuestionTxt = MainConsts.IsPolishFootballFanQuestion;
+		
+		UserFootballPreferences footbalUser = new UserFootballPreferences();
+		footbalUser.PolishFootballFan = MainConsts.FootballFan;
+		UserFootballPreferences antiFootbalUser = new UserFootballPreferences();
+		antiFootbalUser.PolishFootballFan = MainConsts.NotFootballFan;
+		
+        question.Answers.put(MainConsts.YesAns, footbalUser);
+        question.Answers.put(MainConsts.NoAns, antiFootbalUser);
+        
+        BeerExpertMain.SelectedAnswer = null;
+        BeerExpertMain.ActiveQuestion = question;
+        System.out.println("Executed: NeedConcrete");
+
+end
+
+rule "NoConcrete"
+
+    when
+        UserAttitude (AnswerAccuracy == MainConsts.General)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        System.out.println("Executed: NoConcrete");
+
+end
+
+rule "FootballExpert"
+
+    when
+        UserAttitude (AnswerAccuracy == MainConsts.Concrete)
+        pref: UserFootballPreferences (PolishFootballFan == MainConsts.FootballFan, FavoriteFootballClub == null)
+    then
+        Question question = new Question();
+		question.QuestionTxt = MainConsts.FootballClubPreferencesQuestion;
+		
+		List<String> answersTxts = new ArrayList<String>();
+		answersTxts.add(MainConsts.Lech);
+		answersTxts.add(MainConsts.Legia);
+		answersTxts.add(MainConsts.Slask);
+		answersTxts.add(MainConsts.Gornik); 
+		answersTxts.add(MainConsts.Pogon);
+		answersTxts.add(MainConsts.Ruch);
+		answersTxts.add(MainConsts.Korona);
+		answersTxts.add(MainConsts.Cracovia);
+		answersTxts.add(MainConsts.Arka);
+		answersTxts.add(MainConsts.WislaPlock);
+			
+		for(String ansTxt : answersTxts) {
+			UserFootballPreferences currPref = new UserFootballPreferences();
+			currPref.FavoriteFootballClub = ansTxt;
+			question.Answers.put(ansTxt, currPref);
+		}
+		
+        BeerExpertMain.ActiveQuestion = question;
+        System.out.println("Executed: FootballExpert");
+end
+
+rule "FootballLayman"
+
+    when
+        UserAttitude (AnswerAccuracy == MainConsts.Concrete)
+        pref: UserFootballPreferences (PolishFootballFan == MainConsts.NotFootballFan)
+    then
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Carlsberg;
+		answer.SetImage(MainConsts.CarlsbergImg);
+		BeerExpertMain.SelectedAnswer = answer;
+		BeerExpertMain.ActiveQuestion = null;
+        System.out.println("Executed: FootballLayman");
+end
+
+rule "LechFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Lech)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.LechPils;
+		answer.SetImage(MainConsts.LechPilsImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: LechFan");
+
+end
+
+rule "LegiaFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Legia)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Krolewskie;
+		answer.SetImage(MainConsts.KrolewskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: LegiaFan");
+
+end
+
+rule "GornikFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Gornik)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Lomza;
+		answer.SetImage(MainConsts.LomzaImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: LegiaFan");
+
+end
+
+rule "PogonFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Pogon)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Bosman;
+		answer.SetImage(MainConsts.BosmanImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: PogonFan");
+
+end
+
+rule "CracoviaFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Cracovia)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Tyskie;
+		answer.SetImage(MainConsts.TyskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: CracoviaFan");
+
+end
+
+
+rule "SlaskFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Slask)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Tyskie;
+		answer.SetImage(MainConsts.TyskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: SlaskFan");
+
+end
+
+rule "ArkaFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Arka)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Tyskie;
+		answer.SetImage(MainConsts.TyskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: ArkaFan");
+
+end
+
+rule "RuchFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Ruch)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Tyskie;
+		answer.SetImage(MainConsts.TyskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: RuchFan");
+
+end
+
+rule "KoronaFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.Korona)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Tyskie;
+		answer.SetImage(MainConsts.TyskieImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: KoronaFan");
+
+end
+
+rule "WislaFan"
+
+    when
+        UserFootballPreferences (FavoriteFootballClub == MainConsts.WislaPlock)
+    then
+        BeerExpertMain.ActiveQuestion = null;
+        Answer answer = new Answer();
+		answer.AnswerTxt = MainConsts.Kasztelan;
+		answer.SetImage(MainConsts.KasztelanImg);
+		BeerExpertMain.SelectedAnswer = answer;
+        System.out.println("Executed: KoronaFan");
+
+end

@@ -15,7 +15,6 @@ rule "Overture"
 		fussy.KnownFlavorRelevancy = true;
 		question.Answers.put(MainConsts.YesAns, peasant);
 		question.Answers.put(MainConsts.NoAns, fussy);
-		
 		BeerExpertMain.ActiveQuestion = question;
 		System.out.println("Executed: Overture");
 end

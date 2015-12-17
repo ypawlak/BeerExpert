@@ -11,13 +11,10 @@ import javax.imageio.ImageIO;
 public class Answer {
 	public String AnswerTxt;
 	public Image AnswerImage;
-	public Question AdditionalQuestion;
-	private final String imgPath = "src\\images\\";
+	
 	
 	public void SetImage(String name){
-		String fullPath = imgPath + name;
-		File imFile = new File(fullPath);
-		AnswerImage = new Image(imFile.toURI().toString());
+		AnswerImage = ImageHelper.getImage(name);
 	}
 
 }

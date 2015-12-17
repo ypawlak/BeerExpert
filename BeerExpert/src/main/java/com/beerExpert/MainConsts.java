@@ -23,6 +23,8 @@ public class MainConsts {
 	public static final String CofeeQuestion = "Czy lubisz palon¹ kawê?";
 	public static final String BittersQuestion = "Czy chcesz coœ goryczkowego?";
 	public static final String SourQuestion = "Czy lubisz kwaœne cukierki?";
+	public static final String IsPolishFootballFanQuestion = "Czy jesteœ fanem polskiej pi³ki no¿nej?";
+	public static final String FootballClubPreferencesQuestion = "Wobec którego z poni¿szych klubów chcia³byœ zamanifestowaæ lojalnoœæ?";
 	//endregion
 	
 	//region ANSWERS
@@ -37,6 +39,17 @@ public class MainConsts {
 	public static final String DessertAns = "Deser";
 	public static final String FruitAns = "Owocowe i ¿ywiczne";
 	public static final String ChocolateAns = "Czekoladowe i palone";
+	public static final String Lech = "Lech Poznañ";
+	public static final String Legia = "Legia Warszawa";
+	public static final String Slask = "Œl¹sk Wroc³aw";
+	public static final String Gornik = "Górnik Zabrze";
+	public static final String Pogon = "Pogoñ Szczecin";
+	public static final String Ruch = "Ruch Chorzów";
+	public static final String Korona = "Korona Kielce";
+	public static final String Cracovia = "Cracovia Kraków";
+	public static final String Arka = "Arka Gdynia";
+	public static final String WislaPlock = "Wis³a P³ock";
+
 	//endregion
 	
 	//region FACTS
@@ -71,6 +84,10 @@ public class MainConsts {
 	public static final String Strong = "Strong";
 	public static final String Weak = "Weak";
 	public static final String NewHope = "NewHope";
+	public static final String General = "General";
+	public static final String Concrete = "Concrete";
+	public static final String FootballFan = "Football fan";
+	public static final String NotFootballFan = "Not football fan";
 	//endregion
 	
 	//region BEERS
@@ -84,6 +101,13 @@ public class MainConsts {
 	public static final String RussianStout = "Rosyjski Imperialny Stout";
 	public static final String Sour = "Sour";
 	public static final String BarleyWine = "Barley Wine";
+	public static final String Carlsberg = "Carlsberg";
+	public static final String Tyskie = "Tyskie";
+	public static final String LechPils = "LechPils";
+	public static final String Lomza = "£om¿a";
+	public static final String Krolewskie = "Królewskie";
+	public static final String Bosman = "Bosman";
+	public static final String Kasztelan = "Kasztelan";
 	//endregion
 	
 	//region IMAGES
@@ -97,6 +121,14 @@ public class MainConsts {
 	public static final String RussianImg = "Russian.jpg";
 	public static final String SourImg = "Sour.jpg";
 	public static final String BarleyWineImg = "Barley.jpg";
+	public static final String CarlsbergImg = "Carlsberg.jpg";
+	public static final String TyskieImg = "Tyskie.jpg";
+	public static final String LechPilsImg = "lech pils.jpg";
+	public static final String LomzaImg = "lomza.jpg";
+	public static final String KrolewskieImg = "krolewskie.jpg";
+	public static final String BosmanImg = "bosman.jpg";
+	public static final String KasztelanImg = "kasztelan.jpg";
+	
 	//endregion
 
 }

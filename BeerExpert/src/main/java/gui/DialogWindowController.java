@@ -25,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 
@@ -52,7 +53,7 @@ public class DialogWindowController implements Initializable {
 	private Button okBtn;
 	
 	private final double AnswerHeight = 430;
-	private final double AnswerWidth = 400;
+	private final double AnswerWidth = 450;
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		answerBox.managedProperty().bind(answerBox.visibleProperty());
@@ -61,32 +62,45 @@ public class DialogWindowController implements Initializable {
 		answerImage.managedProperty().bind(answerImage.visibleProperty());
 		answerBox.setVisible(false);
 		beerAnswerLbl.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		mainPane.setFillWidth(true);
 	}
 	
-	public void ShowQuestion () {
+	public void update () {
 		optionsBox.getChildren().clear();
-		if (BeerExpertMain.SelectedAnswer != null){
+		if (BeerExpertMain.SelectedAnswer != null) {
 			questionGrid.setVisible(false);
 			answerBox.setVisible(true);
 			beerAnswerLbl.setText(BeerExpertMain.SelectedAnswer.AnswerTxt);
 			answerImage.setImage(BeerExpertMain.SelectedAnswer.AnswerImage);
 			answerImage.setPreserveRatio(true);
-			answerImage.setFitHeight(AnswerHeight - 130);
+			answerImage.setFitHeight(300);
+			
 			answerImage.getScene().getWindow().setHeight(AnswerHeight);
 			answerImage.getScene().getWindow().setWidth(AnswerWidth);
 			
-		}
-		else{
-			if(BeerExpertMain.ActiveQuestion == null)
-				return;
-			questionLbl.setText(BeerExpertMain.ActiveQuestion.QuestionTxt);
-			ToggleGroup questionGroup = new ToggleGroup();
-			for (Map.Entry<String, Object> ans : BeerExpertMain.ActiveQuestion.Answers.entrySet()) {
-				RadioButton option = new RadioButton(ans.getKey());
-				option.setToggleGroup(questionGroup);
-				option.setUserData(ans);
-				optionsBox.getChildren().add(option);
+			if(BeerExpertMain.ActiveQuestion != null) {
+				questionGrid.setVisible(true);
+				showQuestion(BeerExpertMain.ActiveQuestion);
+				double newHeight = AnswerHeight + optionsBox.getChildren().size()*30 + 100;
+				answerImage.getScene().getWindow().setHeight(newHeight);
 			}
+			answerImage.getScene().getWindow().centerOnScreen();
+		}
+		else if(BeerExpertMain.ActiveQuestion != null) {
+			answerBox.setVisible(false);
+			showQuestion(BeerExpertMain.ActiveQuestion);
+			answerImage.getScene().getWindow().setHeight(optionsBox.getChildren().size()*30 + 100);
+		}
+	}
+	
+	private void showQuestion(Question value) {
+		questionLbl.setText(value.QuestionTxt);
+		ToggleGroup questionGroup = new ToggleGroup();
+		for (Map.Entry<String, Object> ans : value.Answers.entrySet()) {
+			RadioButton option = new RadioButton(ans.getKey());
+			option.setToggleGroup(questionGroup);
+			option.setUserData(ans);
+			optionsBox.getChildren().add(option);
 		}
 	}
 

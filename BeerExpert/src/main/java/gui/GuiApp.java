@@ -8,11 +8,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 
 import org.drools.runtime.StatefulKnowledgeSession;
 
+import com.beerExpert.ImageHelper;
 import com.beerExpert.Question;
 import com.beerExpert.BeerExpertMain;
 
@@ -41,21 +46,17 @@ public class GuiApp extends Application{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogWindow.fxml"));
         Parent root = (Parent)loader.load();
         controller = (DialogWindowController)loader.getController();
+
         
-//        AnchorPane anchorPane = new AnchorPane();
-//        AnchorPane.setTopAnchor(root, 3.0);
-//        AnchorPane.setBottomAnchor(root, 3.0);
-//        AnchorPane.setLeftAnchor(root, 10.0);
-//        AnchorPane.setRightAnchor(root, 3.0);
-//        anchorPane.getChildren().add(root);
         Scene scene = new Scene(root);
-        
+        primaryStage.getIcons().add(ImageHelper.getImage("icon_beer.gif"));
         primaryStage.setTitle("Super barman");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.sizeToScene();
         
-    	controller.ShowQuestion();
+    
+    	controller.update();
     	BeerExpertMain.SetGui(this);
     }
 

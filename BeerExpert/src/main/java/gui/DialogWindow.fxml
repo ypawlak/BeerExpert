@@ -12,7 +12,7 @@
 
 	<VBox fx:controller="gui.DialogWindowController"
 			xmlns:fx="http://javafx.com/fxml/1" fx:id="mainPane"
-			alignment="center" spacing="12">
+			alignment="CENTER" spacing="12">
 		<padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
 		<VBox spacing="12" fx:id="answerBox" alignment="CENTER" >
 			<Label textAlignment="CENTER" text="Piwo dla Ciebie to: "></Label>
@@ -22,8 +22,7 @@
 			<Label textAlignment="CENTER" fx:id="beerAnswerLbl">
 	    	</Label>
     	</VBox>
-		<GridPane prefHeight="150"
-				prefWidth="300"
+		<GridPane prefWidth="300"
 				alignment="center" hgap="8" vgap="8" fx:id="questionGrid">
 		   		
 		   		<columnConstraints>
@@ -32,9 +31,9 @@
 	      		</columnConstraints>
 	      		<rowConstraints>
 	        		
-	        		<RowConstraints />
-	        		<RowConstraints />
-	        		<RowConstraints />
+	        		<RowConstraints prefHeight="30.0" />
+	        		<RowConstraints vgrow="ALWAYS"/>
+	        		<RowConstraints prefHeight="30.0" />
 	      		</rowConstraints>
 		    	
 		    	

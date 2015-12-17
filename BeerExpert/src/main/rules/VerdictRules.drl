@@ -7,8 +7,17 @@ rule "CorpoBeer"
 		Answer answer = new Answer();
 		answer.AnswerTxt = MainConsts.Eurolager;
 		answer.SetImage(MainConsts.EurolagerImg);
-		
 		BeerExpertMain.SelectedAnswer = answer;
+		Question additionalResults = new Question();
+		additionalResults.QuestionTxt = "Czy chcesz wybraæ konkretne piwo?";
+		UserAttitude satisfied = new UserAttitude();
+		satisfied.AnswerAccuracy = MainConsts.General;
+		UserAttitude wantsMore = new UserAttitude();
+		wantsMore.AnswerAccuracy = MainConsts.Concrete;
+		additionalResults.Answers.put(MainConsts.YesAns, wantsMore);
+		additionalResults.Answers.put(MainConsts.NoAns, satisfied);
+		BeerExpertMain.ActiveQuestion = additionalResults;
+		
 		System.out.println("Executed: CorpoBeer");
 end
 
