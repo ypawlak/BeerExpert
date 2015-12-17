@@ -16,6 +16,7 @@ public class Answer {
 		BufferedImage img = null;
 		try {
 		    img = ImageIO.read(new File("src\\images\\Eurolager.jpg"));
+		    AnswerImage = img;
 		} catch (IOException e) {
 			System.out.println("Nie znaleziono obrazu!");
 		}
